@@ -16,11 +16,13 @@ def fetch_html(train_id):
     return connection.getresponse().read()
 
 def get_train_number(columns):
-    number = columns[0].span.contents[0]
-    return ' '.join(number.split())
-
-def get_train_name(columns):
-    return columns[0].span.contents[2].strip()
+    contents = columns[0].span.contents
+    number =  ' '.join(contents[0].split())
+    name = contents[2].strip()
+    if name != '':
+        return number + ' ' + name
+    else:
+        return number
 
 def get_train_date(columns):
     return columns[1].span.string
@@ -68,7 +70,6 @@ def parse_html(html):
         tds = tr.find_all('td')
         result.append([
             get_train_number(tds),
-            get_train_name(tds),
             get_train_date(tds),
             get_train_relation(tds),
             get_train_stop_name(tds),
