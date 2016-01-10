@@ -1,0 +1,1 @@
+domain = "infopasazer.intercity.pl"
