@@ -15,6 +15,10 @@ def fetch_html(train_id):
 
     return connection.getresponse().read()
 
+def get_simple_field(columns, index):
+    field = columns[index].span.string
+    return field.strip() if field else ''
+
 def get_train_number(columns):
     contents = columns[0].span.contents
     number =  ' '.join(contents[0].split())
@@ -25,42 +29,27 @@ def get_train_number(columns):
         return number
 
 def get_train_date(columns):
-    return columns[1].span.string
+    return get_simple_field(columns, 1)
 
 def get_train_relation(columns):
     [start, stop] = columns[2].span.string.split('-')
     return start.strip() + ' - ' + stop.strip()
 
 def get_train_stop_name(columns):
-    return columns[3].a.string.strip()
+    name = columns[3].a.string
+    return name.strip() if name else ''
 
 def get_train_sched_arrive_time(columns):
-    time = columns[4].span.string
-    if time:
-        return time
-    else:
-        return ''
+    return get_simple_field(columns, 4)
 
 def get_train_arrive_delay(columns):
-    time = columns[5].span.string
-    if time:
-        return time
-    else:
-        return ''
+    return get_simple_field(columns, 5)
 
 def get_train_sched_dep_time(columns):
-    time = columns[6].span.string
-    if time:
-        return time
-    else:
-        return ''
+    return get_simple_field(columns, 6)
 
 def get_train_dep_delay(columns):
-    time = columns[7].span.string
-    if time:
-        return time
-    else:
-        return ''
+    return get_simple_field(columns, 7)
 
 def parse_html(html):
     result = []
