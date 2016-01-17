@@ -5,8 +5,6 @@ import sys
 from bs4 import BeautifulSoup
 import ipa_config
 
-train_id = sys.argv[1]
-
 def fetch_html(train_id):
     train_request = "/?p=train&id=" + train_id
 
@@ -51,8 +49,9 @@ def get_train_sched_dep_time(columns):
 def get_train_dep_delay(columns):
     return get_simple_field(columns, 7)
 
-def parse_html(html):
+def get_train(train_id):
     result = []
+    html = fetch_html(train_id)
     soup = BeautifulSoup(html, 'html.parser')
 
     for tr in soup.find_all('tr')[1:]:
@@ -77,8 +76,7 @@ def print_train(rows):
         else:
             print row[0]
 
-
 if __name__ == "__main__":
-    html = fetch_html(train_id)
-    rows = parse_html(html)
-    print_train(rows)
+    train_id = sys.argv[1]
+    train = get_train(train_id)
+    print_train(train)

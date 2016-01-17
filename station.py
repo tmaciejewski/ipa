@@ -5,8 +5,6 @@ import sys
 from bs4 import BeautifulSoup
 import ipa_config
 
-station_id = sys.argv[1]
-
 def fetch_html(train_id):
     train_request = "/?p=station&id=" + train_id
 
@@ -59,7 +57,8 @@ def parse_table(table):
             ])
     return result
 
-def parse_html(html):
+def get_station(station_id):
+    html = fetch_html(station_id)
     soup = BeautifulSoup(html, 'html.parser')
     arrivals, departures = soup.find_all('table')
     return parse_table(arrivals), parse_table(departures)
@@ -73,8 +72,8 @@ def print_station(rows):
 
 
 if __name__ == "__main__":
-    html = fetch_html(station_id)
-    arrivals, departues = parse_html(html)
+    station_id = sys.argv[1]
+    arrivals, departues = get_station(station_id)
 
     print 'PRZYJAZDY'
     print '---------------------------------'
