@@ -78,8 +78,7 @@ def print_train(rows):
             print row[0]
 
 
-html = fetch_html(train_id)
-
-rows = parse_html(html)
-
-print_train(rows)
+if __name__ == "__main__":
+    html = fetch_html(train_id)
+    rows = parse_html(html)
+    print_train(rows)
