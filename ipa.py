@@ -6,14 +6,17 @@ import station
 import sys
 
 def create_db(db):
+    """creates new DB"""
     db.remove()
     db.create()
 
 def print_trains(db):
+    """prints all trains from DB"""
     for train in db.get_trains():
         print train
 
 def visit_stations(db):
+    """visits stations and saves trains"""
     trains = {}
 
     for station_id, station_name in ipa_config.stations:
@@ -48,4 +51,4 @@ if __name__ == "__main__":
         command(db)
     else:
         for c in commands:
-            print '\t', c.__name__
+            print '\t', c.__name__, '--', c.__doc__
