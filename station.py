@@ -17,6 +17,10 @@ def get_simple_field(columns, index):
     field = columns[index].span.string
     return field.strip() if field else ''
 
+def get_train_id(columns):
+    id = columns[0].span.a.get('href').split('=')[-1]
+    return id
+
 def get_train_number(columns):
     contents = columns[0].span.a.contents
     number =  ' '.join(contents[0].split())
@@ -48,6 +52,7 @@ def parse_table(table):
         columns = row.find_all('td')
         if len(columns) > 0:
             result.append([
+                get_train_id(columns),
                 get_train_number(columns),
                 get_train_operator(columns),
                 get_train_date(columns),
