@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import ipa_config
 
 def fetch_html(train_id):
-    train_request = "/?p=train&id=" + train_id
+    train_request = "/?p=train&id=" + str(train_id)
 
     connection = httplib.HTTPConnection(ipa_config.domain)
     connection.request('GET', train_request)

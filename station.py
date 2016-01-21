@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import ipa_config
 
 def fetch_html(train_id):
-    train_request = "/?p=station&id=" + train_id
+    train_request = "/?p=station&id=" + str(train_id)
 
     connection = httplib.HTTPConnection(ipa_config.domain)
     connection.request('GET', train_request)
@@ -65,8 +65,12 @@ def parse_table(table):
 def get_station(station_id):
     html = fetch_html(station_id)
     soup = BeautifulSoup(html, 'html.parser')
-    arrivals, departures = soup.find_all('table')
-    return parse_table(arrivals), parse_table(departures)
+    tables = soup.find_all('table')
+    if len(tables) == 2:
+        arrivals, departures = tables 
+        return parse_table(arrivals), parse_table(departures)
+    else:
+        return [], []
 
 def print_station(rows):
     for row in rows:
