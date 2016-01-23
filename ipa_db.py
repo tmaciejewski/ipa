@@ -62,6 +62,7 @@ class Db:
                 ?, ?, ?, ?, ?, ?, ?)''',
                 (id, stop_id, stop[0], stop[1], stop[2], stop[3], stop[4])
             )
+            stop_id += 1
 
         self.__commit()
 
