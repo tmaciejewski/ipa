@@ -14,7 +14,7 @@ def create_db(db, _):
 def print_trains(db, _):
     """prints all trains from DB"""
     for train in db.get_trains():
-        print train
+        print train.encode('utf-8')
 
 def get_trains_from_stations():
     trains = {}
@@ -22,9 +22,9 @@ def get_trains_from_stations():
     for station_id, station_name in ipa_config.stations:
         try:
             arrivals, _ = station.get_station(station_id)
-            print 'Visitied station', station_name
+            print 'Visitied station', station_name.encode('utf-8')
         except:
-            print 'Cannot get trains from station', station_name
+            print 'Cannot get trains from station', station_name.encode('utf-8')
 
         for train in arrivals:
             trains[train[0]] = train
@@ -34,9 +34,9 @@ def get_trains_from_stations():
 def update_train(db, train):
     try:
         db.update_train(train[0], train[1], train[2], train[3], train[5])
-        print 'Updated train', train[0], train[1]
+        print 'Updated train', train[0], train[1].encode('utf-8')
     except Exception as e:
-        print 'Failed to update train', train[0], train[1], ':', e.messaeg
+        print 'Failed to update train', train[0], train[1].encode('utf-8'), ':', e.message
 
 def update_train_schedule(db, train_id):
     try:
