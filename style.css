@@ -1,0 +1,42 @@
+body {
+    line-height: 2em;
+}
+
+span {
+    margin: 5px;
+}
+
+table {
+    table-layout: fixed;
+    width: 300px;
+    text-align: center;
+}
+
+td, th {
+    padding: 5px;
+}
+
+td {
+    width: 200px;
+}
+
+.normal {
+    background-color: #96fe9e;
+}
+
+.minor {
+    background-color: #fffd52;
+}
+
+.moderate {
+    background-color: #ffb452;
+}
+
+.critical {
+    background-color: red;
+}
+
+th, .date {
+    background-color: #aaa;
+    width: 200px;
+}

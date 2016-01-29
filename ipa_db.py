@@ -29,7 +29,7 @@ class Db:
             train_relation text
         )''')
         self.__execute('''CREATE TABLE schedule(
-            train_id integer,
+            train_id integer PRIMARY KEY,
             stop_id integer,
             stop_name text,
             sched_arrive_time text,
@@ -40,7 +40,7 @@ class Db:
         self.__commit()
 
     def get_trains(self):
-        for row in self.__execute('SELECT DISTINCT train_number FROM trains'):
+        for row in self.__execute('SELECT DISTINCT train_number FROM trains ORDER BY train_number'):
             yield row[0]
 
     def update_train(self, id, number, operator, date, relation):
@@ -67,8 +67,8 @@ class Db:
         self.__commit()
 
     def get_train_schedules(self, name):
-        for row in self.__execute('SELECT train_id FROM trains WHERE train_number = ? ORDER BY train_id', (name,)):
-            yield row[0]
+        for row in self.__execute('SELECT * FROM trains WHERE train_number = ? ORDER BY train_date', (name,)):
+            yield row
 
     def get_schedule_info(self, id):
         for row in self.__execute('SELECT * FROM schedule WHERE train_id = ? ORDER BY stop_id', (id,)):

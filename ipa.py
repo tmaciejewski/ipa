@@ -57,8 +57,10 @@ def update_trains(db, _):
 
 def print_train(db, args):
     """prints train all-time schedule"""
-    for train_id in db.get_train_schedules(args[0]):
-        for schedule_info in db.get_schedule_info(train_id):
+    for schedule in db.get_train_schedules(args[0]):
+        print schedule
+        print '-----------------------'
+        for schedule_info in db.get_schedule_info(schedule[0]):
             print schedule_info
         print
 
