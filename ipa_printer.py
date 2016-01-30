@@ -29,11 +29,11 @@ def get_delay_class(info):
 
     delay = max(arr_delay, dep_delay)
 
-    if delay > 60:
+    if delay >= 60:
         return 'critical'
-    elif delay > 20:
+    elif delay >= 20:
         return 'moderate'
-    elif delay > 5:
+    elif delay >= 5:
         return 'minor'
     else:
         return 'normal'
