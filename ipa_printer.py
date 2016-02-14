@@ -2,6 +2,7 @@
 
 import sys
 import os
+import datetime
 
 import ipa_db
 import ipa_config
@@ -10,11 +11,19 @@ def escape(name):
     return name.replace('/', '_')
 
 def make_head(f, title):
+    f.write('<html>\n')
     f.write('   <head>\n')
     f.write('       <title>' + title + '</title>\n')
     f.write('       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n')
     f.write('       <link rel="stylesheet" href="style.css" type="text/css" />\n')
     f.write('   </head>\n')
+
+def make_footer(f):
+    now = datetime.datetime.now()
+    f.write('       <p class="timestamp">Generated %d.%.2d.%.2d %.2d:%.2d</p>\n' \
+            % (now.year, now.month, now.day, now.hour, now.minute))
+    f.write('   </body>\n')
+    f.write('</html>\n')
 
 def get_delay_class(info):
     try:
@@ -41,7 +50,6 @@ def get_delay_class(info):
 def gen_train(output_dir, db, train):
     name = train.encode('utf-8')
     with open(os.path.join(output_dir, escape(name) + '.html'), 'w') as f:
-        f.write('<html>\n')
         make_head(f, name)
         f.write('   <body>\n')
         f.write('       <h1>' + name + '</h1>\n')
@@ -65,12 +73,10 @@ def gen_train(output_dir, db, train):
 
         f.write('       </tbody>\n')
         f.write('       </table>\n')
-        f.write('   </body>\n')
-        f.write('</html>\n')
+        make_footer(f)
 
 def gen_index(output_dir, db):
     with open(os.path.join(output_dir, "index.html"), 'w') as f:
-        f.write('<html>\n')
         make_head(f, 'InfoPasazer Archiver')
         f.write('   <body>\n')
         f.write('       <h1>InfoPasazer Archiver</h1>\n')
@@ -80,8 +86,7 @@ def gen_index(output_dir, db):
             f.write('       <span><a href="' + escape(name) + '.html">' + name + '</a></span>\n')
             gen_train(output_dir, db, train)
 
-        f.write('   </body>\n')
-        f.write('</html>\n')
+        make_footer(f)
 
 if __name__ == "__main__":
 
