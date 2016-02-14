@@ -14,10 +14,11 @@ table {
 
 td, th {
     padding: 5px;
+    width: 200px;
 }
 
-td {
-    width: 200px;
+th {
+    background-color: #aaa;
 }
 
 .normal {
@@ -36,7 +37,6 @@ td {
     background-color: red;
 }
 
-th, .date {
-    background-color: #aaa;
-    width: 200px;
+.timestamp {
+    font-style: italic;
 }

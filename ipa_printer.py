@@ -47,44 +47,59 @@ def get_delay_class(info):
     else:
         return 'normal'
 
-def gen_train(output_dir, db, train):
+def make_station_row(f, stations, date_freq):
+    f.write('           <tr>')
+    i = 0
+    for station in stations:
+        if i % date_freq == 0:
+            f.write('<th></th>')
+        else:
+            f.write('<th>' + station.encode('utf-8') + '</th>')
+        i += 1
+    f.write('</tr>')
+
+def make_time_row(f, schedule, schedule_info, date_freq):
+    f.write('           <tr>')
+    col_num = 0
+    for info in schedule_info:
+        if col_num % date_freq == 0:
+            f.write('<th class="date">' + schedule[3] + '</th>')
+        else:
+            f.write('<td class="' + get_delay_class(info) + '"><p class="arr">&#8594; ' + info[3][:5] + ' (' + info[4] + ')</p><p class="dep">' + info[5][:5] + ' (' + info[6] + ') &#8594;</p></td>')
+        col_num += 1
+    f.write('</tr>\n')
+
+def gen_train(output_dir, train, schedules, schedule_infos):
     name = train.encode('utf-8')
+    stations = [info[2] for info in schedule_infos[schedules[0][0]]]
     with open(os.path.join(output_dir, escape(name) + '.html'), 'w') as f:
         make_head(f, name)
         f.write('   <body>\n')
         f.write('       <h1>' + name + '</h1>\n')
         f.write('       <table>\n')
-        f.write('       <thead><tr>\n<th>Date</th>')
 
-        schedules = list(db.get_train_schedules(train))
-
-        for info in db.get_schedule_info(schedules[0][0]):
-            f.write('               <th>' + info[2].encode('utf-8') + '</th>')
-
-        f.write('       </tr></thead>\n')
-        f.write('       <tbody>\n')
-
+        row_num = 0
+        station_freq = 10
+        date_freq = 10
         for schedule in schedules:
-            f.write('           <tr>')
-            f.write('<td class="date">' + schedule[3] + '</td>')
-            for info in db.get_schedule_info(schedule[0]):
-                f.write('<td class="' + get_delay_class(info) + '"><p class="arr">&#8594; ' + info[3][:5] + ' (' + info[4] + ')</p><p class="dep">' + info[5][:5] + ' (' + info[6] + ') &#8594;</p></td>')
-            f.write('</tr>\n')
+            if row_num % station_freq == 0:
+                make_station_row(f, stations, date_freq)
+            else:
+                make_time_row(f, schedule, schedule_infos[schedule[0]], date_freq)
+            row_num += 1
 
-        f.write('       </tbody>\n')
         f.write('       </table>\n')
         make_footer(f)
 
-def gen_index(output_dir, db):
+def gen_index(output_dir, trains):
     with open(os.path.join(output_dir, "index.html"), 'w') as f:
         make_head(f, 'InfoPasazer Archiver')
         f.write('   <body>\n')
         f.write('       <h1>InfoPasazer Archiver</h1>\n')
 
-        for train in db.get_trains():
+        for train in trains:
             name = train.encode('utf-8')
             f.write('       <span><a href="' + escape(name) + '.html">' + name + '</a></span>\n')
-            gen_train(output_dir, db, train)
 
         make_footer(f)
 
@@ -101,5 +116,11 @@ if __name__ == "__main__":
         sys.exit(2)
 
     db = ipa_db.Db(ipa_config.db_name)
-
-    gen_index(output_dir, db)
+    trains = list(db.get_trains())
+    gen_index(output_dir, trains)
+    for train in trains:
+        schedules = list(db.get_train_schedules(train))
+        schedule_infos = {}
+        for schedule in schedules:
+            schedule_infos[schedule[0]] = list(db.get_schedule_info(schedule[0]))
+        gen_train(output_dir, train, schedules, schedule_infos)
