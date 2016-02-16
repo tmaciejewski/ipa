@@ -20,6 +20,7 @@ def get_trains_from_stations():
     trains = {}
 
     for station_id, station_name in ipa_config.stations:
+        arrivals = []
         try:
             arrivals, _ = station.get_station(station_id)
             print 'Visitied station', station_name.encode('utf-8')
