@@ -53,8 +53,7 @@ def make_station_row(f, stations, date_freq):
     for station in stations:
         if i % date_freq == 0:
             f.write('<th></th>')
-        else:
-            f.write('<th>' + station.encode('utf-8') + '</th>')
+        f.write('<th>' + station.encode('utf-8') + '</th>')
         i += 1
     f.write('</tr>')
 
@@ -64,8 +63,7 @@ def make_time_row(f, schedule, schedule_info, date_freq):
     for info in schedule_info:
         if col_num % date_freq == 0:
             f.write('<th class="date">' + schedule[3] + '</th>')
-        else:
-            f.write('<td class="' + get_delay_class(info) + '"><p class="arr">&#8594; ' + info[3][:5] + ' (' + info[4] + ')</p><p class="dep">' + info[5][:5] + ' (' + info[6] + ') &#8594;</p></td>')
+        f.write('<td class="' + get_delay_class(info) + '"><p class="arr">&#8594; ' + info[3][:5] + ' (' + info[4] + ')</p><p class="dep">' + info[5][:5] + ' (' + info[6] + ') &#8594;</p></td>')
         col_num += 1
     f.write('</tr>\n')
 
@@ -84,8 +82,7 @@ def gen_train(output_dir, train, schedules, schedule_infos):
         for schedule in schedules:
             if row_num % station_freq == 0:
                 make_station_row(f, stations, date_freq)
-            else:
-                make_time_row(f, schedule, schedule_infos[schedule[0]], date_freq)
+            make_time_row(f, schedule, schedule_infos[schedule[0]], date_freq)
             row_num += 1
 
         f.write('       </table>\n')
