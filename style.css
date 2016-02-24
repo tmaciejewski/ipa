@@ -21,6 +21,10 @@ th {
     background-color: #aaa;
 }
 
+th:empty {
+    background-color: #fff;
+}
+
 .normal {
     background-color: #96fe9e;
 }

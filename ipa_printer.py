@@ -47,43 +47,41 @@ def get_delay_class(info):
     else:
         return 'normal'
 
-def make_station_row(f, stations, date_freq):
+def make_station_row(f, stations, date, date_freq):
     f.write('           <tr>')
     i = 0
     for station in stations:
         if i % date_freq == 0:
-            f.write('<th></th>')
+            if station != '':
+                f.write('<th rowspan=2 class="date">' + date + '</th>')
+            else:
+                f.write('<th rowspan=2 class="date"></th>')
         f.write('<th>' + station.encode('utf-8') + '</th>')
         i += 1
     f.write('</tr>')
 
-def make_time_row(f, schedule, schedule_info, date_freq):
+def make_time_row(f, schedule, schedule_info):
     f.write('           <tr>')
-    col_num = 0
     for info in schedule_info:
-        if col_num % date_freq == 0:
-            f.write('<th class="date">' + schedule[3] + '</th>')
         f.write('<td class="' + get_delay_class(info) + '"><p class="arr">&#8594; ' + info[3][:5] + ' (' + info[4] + ')</p><p class="dep">' + info[5][:5] + ' (' + info[6] + ') &#8594;</p></td>')
-        col_num += 1
     f.write('</tr>\n')
 
 def gen_train(output_dir, train, schedules, schedule_infos):
     name = train.encode('utf-8')
-    stations = [info[2] for info in schedule_infos[schedules[0][0]]]
+    stations_width = max([len(schedule_infos[schedule]) for schedule in schedule_infos])
     with open(os.path.join(output_dir, escape(name) + '.html'), 'w') as f:
         make_head(f, name)
         f.write('   <body>\n')
         f.write('       <h1>' + name + '</h1>\n')
         f.write('       <table>\n')
 
-        row_num = 0
-        station_freq = 10
         date_freq = 10
         for schedule in schedules:
-            if row_num % station_freq == 0:
-                make_station_row(f, stations, date_freq)
-            make_time_row(f, schedule, schedule_infos[schedule[0]], date_freq)
-            row_num += 1
+            stations = [info[2] for info in schedule_infos[schedule[0]]]
+            while len(stations) < stations_width:
+                stations.append('')
+            make_station_row(f, stations, schedule[3], date_freq)
+            make_time_row(f, schedule, schedule_infos[schedule[0]])
 
         f.write('       </table>\n')
         make_footer(f)
