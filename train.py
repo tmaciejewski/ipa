@@ -56,23 +56,25 @@ def get_train(train_id):
 
     for tr in soup.find_all('tr')[1:]:
         tds = tr.find_all('td')
-        result.append([
-            get_train_number(tds),
-            get_train_date(tds),
-            get_train_relation(tds),
-            get_train_stop_name(tds),
-            get_train_sched_arrive_time(tds),
-            get_train_arrive_delay(tds),
-            get_train_sched_dep_time(tds),
-            get_train_dep_delay(tds)
-        ])
+        result.append({
+            'number': get_train_number(tds),
+            'date': get_train_date(tds),
+            'relation': get_train_relation(tds),
+            'stop_name': get_train_stop_name(tds),
+            'sched_arrive_time': get_train_sched_arrive_time(tds),
+            'arrive_delay': get_train_arrive_delay(tds),
+            'sched_dep_time': get_train_sched_dep_time(tds),
+            'dep_delay': get_train_dep_delay(tds)
+        })
 
     return result
 
 def print_train(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join(row)
+            print ' | '.join([row['number'], row['date'], row['relation'], row['stop_name'],
+                              row['sched_arrive_time'], row['arrive_delay'], row['sched_dep_time'],
+                              row['dep_delay']])
         else:
             print row[0]
 

@@ -29,13 +29,14 @@ class Db:
             train_relation text
         )''')
         self.__execute('''CREATE TABLE schedule(
-            train_id integer PRIMARY KEY,
+            train_id integer,
             stop_id integer,
             stop_name text,
             sched_arrive_time text,
             sched_arrive_delay text,
             sched_departure_time text,
-            sched_departure_delay text
+            sched_departure_delay text,
+            PRIMARY KEY(train_id, stop_id)
         )''')
         self.__commit()
 

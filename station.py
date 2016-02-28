@@ -51,15 +51,15 @@ def parse_table(table):
     for row in table.find_all('tr')[1:]:
         columns = row.find_all('td')
         if len(columns) > 0:
-            result.append([
-                get_train_id(columns),
-                get_train_number(columns),
-                get_train_operator(columns),
-                get_train_date(columns),
-                get_train_relation(columns),
-                get_train_time(columns),
-                get_train_delay(columns),
-            ])
+            result.append({
+                'id': get_train_id(columns),
+                'number': get_train_number(columns),
+                'operator': get_train_operator(columns),
+                'date': get_train_date(columns),
+                'relation': get_train_relation(columns),
+                'time': get_train_time(columns),
+                'delay': get_train_delay(columns),
+            })
     return result
 
 def get_station(station_id):
@@ -75,7 +75,8 @@ def get_station(station_id):
 def print_station(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join(row)
+            print ' | '.join([row['id'], row['number'], row['operator'], row['date'],
+                              row['relation'], row['time'], row['delay']])
         else:
             print row[0]
 

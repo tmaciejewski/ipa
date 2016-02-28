@@ -28,20 +28,20 @@ def get_trains_from_stations():
             print 'Cannot get trains from station', station_name.encode('utf-8')
 
         for train in arrivals:
-            trains[train[0]] = train
+            trains[train['id']] = train
 
     return trains
 
 def update_train(db, train):
     try:
-        db.update_train(train[0], train[1], train[2], train[3], train[4])
-        print 'Updated train', train[0], train[1].encode('utf-8')
+        db.update_train(train['id'], train['number'], train['operator'], train['date'], train['relation'])
+        print 'Updated train', train['id'], train['number'].encode('utf-8')
     except Exception as e:
-        print 'Failed to update train', train[0], train[1].encode('utf-8'), ':', e.message
+        print 'Failed to update train', train['id'], train['number'].encode('utf-8'), ':', e.message
 
 def update_train_schedule(db, train_id):
     try:
-        schedule = [(stop[3], stop[4], stop[5], stop[6], stop[7])
+        schedule = [(stop['stop_name'], stop['sched_arrive_time'], stop['arrive_delay'], stop['sched_dep_time'], stop['dep_delay'])
                         for stop in train.get_train(train_id)]
         db.update_schedule(train_id, schedule)
         print 'Updated train schedule', train_id
@@ -58,7 +58,7 @@ def update_trains(db, _):
 
 def print_train(db, args):
     """prints train all-time schedule"""
-    for schedule in db.get_train_schedules(args[0]):
+    for schedule in db.get_train_schedules(args[0].decode('utf-8')):
         print schedule
         print '-----------------------'
         for schedule_info in db.get_schedule_info(schedule[0]):
