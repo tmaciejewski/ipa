@@ -14,7 +14,7 @@ def create_db(db, _):
 def print_trains(db, _):
     """prints all trains from DB"""
     for train in db.get_trains():
-        print train.encode('utf-8')
+        print train['train_number'].encode('utf-8')
 
 def get_trains_from_stations():
     trains = {}
@@ -59,10 +59,10 @@ def update_trains(db, _):
 def print_train(db, args):
     """prints train all-time schedule"""
     for schedule in db.get_train_schedules(args[0].decode('utf-8')):
-        print schedule
+        print schedule.values()
         print '-----------------------'
-        for schedule_info in db.get_schedule_info(schedule[0]):
-            print schedule_info
+        for schedule_info in db.get_schedule_info(schedule['train_id']):
+            print schedule_info.values()
         print
 
 if __name__ == "__main__":

@@ -7,28 +7,33 @@ class Db:
     def __del__(self):
         self.conn.close()
 
-    def __execute(self, sql, args = tuple()):
+    def _execute(self, sql, args = tuple()):
         c = self.conn.cursor()
         c.execute(sql, args)
         return c
 
-    def __commit(self):
+    def _commit(self):
         self.conn.commit()
 
+    def _format_select(self, cursor):
+        names = [desc[0] for desc in cursor.description]
+        for row in cursor:
+            yield dict(zip(names, row))
+
     def remove(self):
-        self.__execute('DROP TABLE IF EXISTS trains')
-        self.__execute('DROP TABLE IF EXISTS schedule')
-        self.__commit()
+        self._execute('DROP TABLE IF EXISTS trains')
+        self._execute('DROP TABLE IF EXISTS schedule')
+        self._commit()
 
     def create(self):
-        self.__execute('''CREATE TABLE trains(
+        self._execute('''CREATE TABLE trains(
             train_id integer PRIMARY KEY,
             train_number text,
             train_operator text,
             train_date text,
             train_relation text
         )''')
-        self.__execute('''CREATE TABLE schedule(
+        self._execute('''CREATE TABLE schedule(
             train_id integer,
             stop_id integer,
             stop_name text,
@@ -38,39 +43,36 @@ class Db:
             sched_departure_delay text,
             PRIMARY KEY(train_id, stop_id)
         )''')
-        self.__commit()
+        self._commit()
 
     def get_trains(self):
-        for row in self.__execute('SELECT DISTINCT train_number FROM trains ORDER BY train_number'):
-            yield row[0]
+        return self._format_select(self._execute('SELECT * FROM trains GROUP BY train_number ORDER BY train_number'))
 
     def update_train(self, id, number, operator, date, relation):
-        self.__execute('DELETE FROM trains WHERE train_id = ?', (id,))
+        self._execute('DELETE FROM trains WHERE train_id = ?', (id,))
 
-        self.__execute('''INSERT INTO trains VALUES (
+        self._execute('''INSERT INTO trains VALUES (
             ?, ?, ?, ?, ?)''',
             (id, number, operator, date, relation)
         )
 
-        self.__commit()
+        self._commit()
 
     def update_schedule(self, id, schedule):
-        self.__execute('DELETE FROM schedule WHERE train_id = ?', (id,))
+        self._execute('DELETE FROM schedule WHERE train_id = ?', (id,))
 
         stop_id = 1
         for stop in schedule:
-            self.__execute('''INSERT INTO schedule VALUES (
+            self._execute('''INSERT INTO schedule VALUES (
                 ?, ?, ?, ?, ?, ?, ?)''',
                 (id, stop_id, stop[0], stop[1], stop[2], stop[3], stop[4])
             )
             stop_id += 1
 
-        self.__commit()
+        self._commit()
 
     def get_train_schedules(self, name):
-        for row in self.__execute('SELECT * FROM trains WHERE train_number = ? ORDER BY train_date', (name,)):
-            yield row
+        return self._format_select(self._execute('SELECT * FROM trains WHERE train_number = ? ORDER BY train_date', (name,)))
 
     def get_schedule_info(self, id):
-        for row in self.__execute('SELECT * FROM schedule WHERE train_id = ? ORDER BY stop_id', (id,)):
-            yield row
+        return self._format_select(self._execute('SELECT * FROM schedule WHERE train_id = ? ORDER BY stop_id', (id,)))
