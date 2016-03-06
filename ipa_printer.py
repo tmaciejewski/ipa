@@ -27,12 +27,12 @@ def make_footer(f):
 
 def get_delay_class(info):
     try:
-        arr_delay = int(info[4].split()[0])
+        arr_delay = int(info['sched_arrive_delay'].split()[0])
     except:
         arr_delay = 0
 
     try:
-        dep_delay = int(info[6].split()[0])
+        dep_delay = int(info['sched_departure_delay'].split()[0])
     except:
         dep_delay = 0
 
