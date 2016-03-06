@@ -21,9 +21,13 @@ def get_train_id(columns):
     id = columns[0].span.a.get('href').split('=')[-1]
     return id
 
+def get_train_number(columns):
+    contents = columns[0].span.a.contents
+    return contents[0].split()[0].split('/')[0]
+
 def get_train_name(columns):
     contents = columns[0].span.a.contents
-    number =  ' '.join(contents[0].split())
+    number =  contents[0].split()[0]
     if len(contents) > 2:
         name = contents[2].strip()
         return number + ' ' + name
@@ -53,6 +57,7 @@ def parse_table(table):
         if len(columns) > 0:
             result.append({
                 'id': get_train_id(columns),
+                'number': get_train_number(columns),
                 'name': get_train_name(columns),
                 'operator': get_train_operator(columns),
                 'date': get_train_date(columns),

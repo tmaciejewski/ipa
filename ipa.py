@@ -34,7 +34,7 @@ def get_trains_from_stations():
 
 def update_train(db, train):
     try:
-        db.update_train(train['id'], train['name'], train['operator'], train['date'], train['relation'])
+        db.update_train(train['id'], train['number'], train['name'], train['operator'], train['date'], train['relation'])
         print 'Updated train', train['id'], train['name'].encode('utf-8')
     except Exception as e:
         print 'Failed to update train', train['id'], train['name'].encode('utf-8'), ':', e.message

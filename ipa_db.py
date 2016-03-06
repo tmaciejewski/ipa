@@ -53,10 +53,8 @@ class Db:
     def get_trains(self):
         return self._format_select(self._execute('SELECT * FROM trains GROUP BY train_number ORDER BY train_number'))
 
-    def update_train(self, id, name, operator, date, relation):
+    def update_train(self, id, number, name, operator, date, relation):
         self._execute('DELETE FROM trains WHERE train_id = ?', (id,))
-
-        number = int(name.split()[0].split('/')[0])
 
         self._execute('''INSERT INTO trains VALUES (
             ?, ?, ?, ?, ?, ?)''',
