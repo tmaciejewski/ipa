@@ -21,7 +21,7 @@ def get_train_id(columns):
     id = columns[0].span.a.get('href').split('=')[-1]
     return id
 
-def get_train_number(columns):
+def get_train_name(columns):
     contents = columns[0].span.a.contents
     number =  ' '.join(contents[0].split())
     if len(contents) > 2:
@@ -53,7 +53,7 @@ def parse_table(table):
         if len(columns) > 0:
             result.append({
                 'id': get_train_id(columns),
-                'number': get_train_number(columns),
+                'name': get_train_name(columns),
                 'operator': get_train_operator(columns),
                 'date': get_train_date(columns),
                 'relation': get_train_relation(columns),
@@ -75,7 +75,7 @@ def get_station(station_id):
 def print_station(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join([row['id'], row['number'], row['operator'], row['date'],
+            print ' | '.join([row['id'], row['name'], row['operator'], row['date'],
                               row['relation'], row['time'], row['delay']])
         else:
             print row[0]

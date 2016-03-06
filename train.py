@@ -17,7 +17,7 @@ def get_simple_field(columns, index):
     field = columns[index].span.string
     return field.strip() if field else ''
 
-def get_train_number(columns):
+def get_train_name(columns):
     contents = columns[0].span.contents
     number =  ' '.join(contents[0].split())
     name = contents[2].strip()
@@ -57,7 +57,7 @@ def get_train(train_id):
     for tr in soup.find_all('tr')[1:]:
         tds = tr.find_all('td')
         result.append({
-            'number': get_train_number(tds),
+            'name': get_train_name(tds),
             'date': get_train_date(tds),
             'relation': get_train_relation(tds),
             'stop_name': get_train_stop_name(tds),
@@ -72,7 +72,7 @@ def get_train(train_id):
 def print_train(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join([row['number'], row['date'], row['relation'], row['stop_name'],
+            print ' | '.join([row['name'], row['date'], row['relation'], row['stop_name'],
                               row['sched_arrive_time'], row['arrive_delay'], row['sched_dep_time'],
                               row['dep_delay']])
         else:

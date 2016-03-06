@@ -68,8 +68,8 @@ def make_time_row(f, schedule_info):
         f.write('<p class="dep">' + info['sched_departure_time'][:5] + ' (' + info['sched_departure_delay'] + ') &#8594;</p></td>')
     f.write('</tr>\n')
 
-def gen_train(output_dir, train, schedules, schedule_infos):
-    name = train.encode('utf-8')
+def gen_train(output_dir, train_name, schedules, schedule_infos):
+    name = train_name.encode('utf-8')
     stations_width = max([len(schedule_infos[schedule]) for schedule in schedule_infos])
     with open(os.path.join(output_dir, escape(name) + '.html'), 'w') as f:
         make_head(f, name)
@@ -95,7 +95,7 @@ def gen_index(output_dir, trains):
         f.write('       <h1>InfoPasazer Archiver</h1>\n')
 
         for train in trains:
-            name = train['train_number'].encode('utf-8')
+            name = train['train_name'].encode('utf-8')
             f.write('       <span><a href="' + escape(name) + '.html">' + name + '</a></span>\n')
 
         make_footer(f)
@@ -120,4 +120,4 @@ if __name__ == "__main__":
         schedule_infos = {}
         for schedule in schedules:
             schedule_infos[schedule['train_id']] = list(db.get_schedule_info(schedule['train_id']))
-        gen_train(output_dir, train['train_number'], schedules, schedule_infos)
+        gen_train(output_dir, train['train_name'], schedules, schedule_infos)

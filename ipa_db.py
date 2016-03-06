@@ -28,11 +28,16 @@ class Db:
     def create(self):
         self._execute('''CREATE TABLE trains(
             train_id integer PRIMARY KEY,
-            train_number text,
+            train_number integer,
+            train_name text,
             train_operator text,
             train_date text,
             train_relation text
         )''')
+
+        self._execute('''CREATE INDEX trains_train_number_idx
+                         ON trains (train_number)''')
+
         self._execute('''CREATE TABLE schedule(
             train_id integer,
             stop_id integer,
@@ -48,12 +53,14 @@ class Db:
     def get_trains(self):
         return self._format_select(self._execute('SELECT * FROM trains GROUP BY train_number ORDER BY train_number'))
 
-    def update_train(self, id, number, operator, date, relation):
+    def update_train(self, id, name, operator, date, relation):
         self._execute('DELETE FROM trains WHERE train_id = ?', (id,))
 
+        number = int(name.split()[0].split('/')[0])
+
         self._execute('''INSERT INTO trains VALUES (
-            ?, ?, ?, ?, ?)''',
-            (id, number, operator, date, relation)
+            ?, ?, ?, ?, ?, ?)''',
+            (id, number, name, operator, date, relation)
         )
 
         self._commit()
@@ -71,8 +78,8 @@ class Db:
 
         self._commit()
 
-    def get_train_schedules(self, name):
-        return self._format_select(self._execute('SELECT * FROM trains WHERE train_number = ? ORDER BY train_date', (name,)))
+    def get_train_schedules(self, number):
+        return self._format_select(self._execute('SELECT * FROM trains WHERE train_number = ? ORDER BY train_date', (number,)))
 
     def get_schedule_info(self, id):
         return self._format_select(self._execute('SELECT * FROM schedule WHERE train_id = ? ORDER BY stop_id', (id,)))
