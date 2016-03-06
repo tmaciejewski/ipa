@@ -10,6 +10,7 @@ table {
     table-layout: fixed;
     width: 300px;
     text-align: center;
+    font-size: 14px;
 }
 
 td, th {
