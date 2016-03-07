@@ -96,7 +96,8 @@ def gen_index(output_dir, trains):
 
         for train in trains:
             name = train['train_name'].encode('utf-8')
-            f.write('       <span><a href="' + escape(name) + '.html">' + name + '</a></span>\n')
+            non_breakable_name = '&nbsp;'.join(train['train_name'].split()).encode('utf-8')
+            f.write('       <span><a href="' + escape(name) + '.html">' + non_breakable_name + '</a></span>\n')
 
         make_footer(f)
 
