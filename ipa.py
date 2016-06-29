@@ -43,8 +43,12 @@ def update_train_schedule(db, train_id):
     try:
         schedule = [(stop['stop_name'], stop['sched_arrive_time'], stop['arrive_delay'], stop['sched_dep_time'], stop['dep_delay'])
                         for stop in train.get_train(train_id)]
-        db.update_schedule(train_id, schedule)
-        print 'Updated train schedule', train_id
+        if schedule != []:
+            db.update_schedule(train_id, schedule)
+            print 'Updated train schedule', train_id
+        else:
+            db.mark_as_inactive(train_id)
+            print 'Mark as inactive train ', train_id
     except Exception as e:
         print 'Failed to update train schedule', train_id, ':', e.message
 
@@ -54,7 +58,9 @@ def update_trains(db, _):
     trains = get_trains_from_stations()
     for train_id in trains:
         update_train(db, trains[train_id])
-        update_train_schedule(db, train_id)
+
+    for train in db.get_active_trains():
+        update_train_schedule(db, train['train_id'])
 
 def print_train(db, args):
     """prints train all-time schedule"""

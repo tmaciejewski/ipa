@@ -32,7 +32,8 @@ class Db:
             train_name text,
             train_operator text,
             train_date text,
-            train_relation text
+            train_relation text,
+            train_active integer
         )''')
 
         self._execute('''CREATE INDEX trains_train_number_idx
@@ -53,12 +54,18 @@ class Db:
     def get_trains(self):
         return self._format_select(self._execute('SELECT * FROM trains GROUP BY train_number ORDER BY train_number'))
 
+    def get_active_trains(self):
+        return self._format_select(self._execute('SELECT * FROM trains WHERE train_active = 1'))
+
+    def mark_as_inactive(self, id):
+        self._execute('UPDATE trains SET train_active = 0 WHERE train_id = ?', (id,))
+
     def update_train(self, id, number, name, operator, date, relation):
         self._execute('DELETE FROM trains WHERE train_id = ?', (id,))
 
         self._execute('''INSERT INTO trains VALUES (
-            ?, ?, ?, ?, ?, ?)''',
-            (id, number, name, operator, date, relation)
+            ?, ?, ?, ?, ?, ?, ?)''',
+            (id, number, name, operator, date, relation, 1)
         )
 
         self._commit()
