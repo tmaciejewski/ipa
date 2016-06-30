@@ -5,6 +5,10 @@ import ipa_config
 import station
 import train
 import sys
+import datetime
+
+def timestamp():
+    return datetime.datetime.now().ctime()
 
 def create_db(db, _):
     """creates new DB"""
@@ -23,9 +27,9 @@ def get_trains_from_stations():
         arrivals = []
         try:
             arrivals, _ = station.get_station(station_id)
-            print 'Visitied station', station_name.encode('utf-8')
+            print timestamp(), 'Visitied station', station_name.encode('utf-8')
         except:
-            print 'Cannot get trains from station', station_name.encode('utf-8')
+            print timestamp(), 'Cannot get trains from station', station_name.encode('utf-8')
 
         for train in arrivals:
             trains[train['id']] = train
@@ -35,9 +39,9 @@ def get_trains_from_stations():
 def update_train(db, train):
     try:
         db.update_train(train['id'], train['number'], train['name'], train['operator'], train['date'], train['relation'])
-        print 'Updated train', train['id'], train['name'].encode('utf-8')
+        print timestamp(), 'Updated train', train['id'], train['name'].encode('utf-8')
     except Exception as e:
-        print 'Failed to update train', train['id'], train['name'].encode('utf-8'), ':', e.message
+        print timestamp(), 'Failed to update train', train['id'], train['name'].encode('utf-8'), ':', e.message
 
 def update_train_schedule(db, train_id):
     try:
@@ -45,12 +49,12 @@ def update_train_schedule(db, train_id):
                         for stop in train.get_train(train_id)]
         if schedule != []:
             db.update_schedule(train_id, schedule)
-            print 'Updated train schedule', train_id
+            print timestamp(), 'Updated train schedule', train_id
         else:
             db.mark_as_inactive(train_id)
-            print 'Mark as inactive train ', train_id
+            print timestamp(), 'Mark as inactive train ', train_id
     except Exception as e:
-        print 'Failed to update train schedule', train_id, ':', e.message
+        print timestamp(), 'Failed to update train schedule', train_id, ':', e.message
 
 def update_trains(db, _):
     """updated trains in DB based on preconfigured set of stations"""
