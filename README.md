@@ -1,7 +1,7 @@
-# README
+# IPA
 
 IPA stands for InfoPasażer Archives. InfoPasażer is a site maintained by PKP (National Polish Railways)
-that show current information about all trains (even not owned by PKP). The site is great, but trains
+that shows informations about all trains (even not owned by PKP), eg. their current position and delay. The site is great, but trains
 disappear as soon as they reach their destinations; hence the idea of archiving it.
 
 ## Using as a CLI tool
@@ -66,3 +66,8 @@ This will read the database and generate HTML pages for every train in `output_d
     ./ipa_printer.py output_dir
 
 You can use `style.css` stylesheet file to display it nicely.
+
+## Known issues
+There is a couple of known issues:
+* dates of night trains (ie. riding at midnight) may be wrong by 1 day
+* sometimes in generated HTML not every timestamp has its station name column 
