@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import sys
 import os
@@ -13,7 +14,7 @@ def escape(name):
 def make_head(f, title):
     f.write('<html>\n')
     f.write('   <head>\n')
-    f.write('       <title>' + title + '</title>\n')
+    f.write('       <title>' + title + ' - archiwum opóźnień pociągów</title>\n')
     f.write('       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n')
     f.write('       <link rel="stylesheet" href="style.css" type="text/css" />\n')
     f.write('   </head>\n')
