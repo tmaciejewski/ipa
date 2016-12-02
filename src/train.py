@@ -17,6 +17,12 @@ def get_simple_field(columns, index):
     field = columns[index].span.string
     return field.strip() if field else ''
 
+def get_delay_field(columns, index):
+    try:
+        return str(int(get_simple_field(columns, index).split()[0]))
+    except:
+        return ''
+
 def get_train_name(columns):
     contents = columns[0].span.contents
     number =  ' '.join(contents[0].split())
@@ -27,7 +33,8 @@ def get_train_name(columns):
         return number
 
 def get_train_date(columns):
-    return get_simple_field(columns, 1)
+    [d, m, y] = get_simple_field(columns, 1).split('.')
+    return '%s-%s-%s' % (y, m, d)
 
 def get_train_relation(columns):
     [start, stop] = columns[2].span.string.split('-')
@@ -41,13 +48,13 @@ def get_train_sched_arrive_time(columns):
     return get_simple_field(columns, 4)
 
 def get_train_arrive_delay(columns):
-    return get_simple_field(columns, 5)
+    return get_delay_field(columns, 5)
 
 def get_train_sched_dep_time(columns):
     return get_simple_field(columns, 6)
 
 def get_train_dep_delay(columns):
-    return get_simple_field(columns, 7)
+    return get_delay_field(columns, 7)
 
 def get_train(train_id):
     result = []
@@ -61,10 +68,10 @@ def get_train(train_id):
             'date': get_train_date(tds),
             'relation': get_train_relation(tds),
             'stop_name': get_train_stop_name(tds),
-            'sched_arrive_time': get_train_sched_arrive_time(tds),
-            'arrive_delay': get_train_arrive_delay(tds),
-            'sched_dep_time': get_train_sched_dep_time(tds),
-            'dep_delay': get_train_dep_delay(tds)
+            'arrival_time': get_train_sched_arrive_time(tds),
+            'arrival_delay': get_train_arrive_delay(tds),
+            'departure_time': get_train_sched_dep_time(tds),
+            'departure_delay': get_train_dep_delay(tds)
         })
 
     return result
@@ -73,8 +80,8 @@ def print_train(rows):
     for row in rows:
         if (len(row) > 1):
             print ' | '.join([row['name'], row['date'], row['relation'], row['stop_name'],
-                              row['sched_arrive_time'], row['arrive_delay'], row['sched_dep_time'],
-                              row['dep_delay']])
+                              row['arrival_time'], row['arrival_delay'], row['departure_time'],
+                              row['departure_delay']])
         else:
             print row[0]
 
