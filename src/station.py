@@ -27,7 +27,7 @@ def get_train_number(columns):
 
 def get_train_name(columns):
     contents = columns[0].span.a.contents
-    number =  contents[0].split()[0]
+    number = contents[0].split()[0]
     if len(contents) > 2:
         name = contents[2].strip()
         return number + ' ' + name

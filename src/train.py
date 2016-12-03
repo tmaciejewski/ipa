@@ -25,7 +25,7 @@ def get_delay_field(columns, index):
 
 def get_train_name(columns):
     contents = columns[0].span.contents
-    number =  ' '.join(contents[0].split())
+    number = ' '.join(contents[0].split())
     name = contents[2].strip()
     if name != '':
         return number + ' ' + name

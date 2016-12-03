@@ -5,8 +5,6 @@ import sys
 import commands
 import ipa_db
 import ipa_config
-import station
-import train
 
 if __name__ == "__main__":
     commands = {c.name: c for c in commands.all_commands}
