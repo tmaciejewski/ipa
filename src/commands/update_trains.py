@@ -1,5 +1,9 @@
 import datetime
 
+import station
+import train
+import ipa_config
+
 def log(msg, *args):
     timestamp = datetime.datetime.now().ctime()
     print timestamp, msg % args
@@ -30,8 +34,8 @@ class UpdateTrains:
             try:
                 arrivals, _ = station.get_station(station_id)
                 log('Visitied station %s', station_name)
-            except:
-                log('Cannot get trains from station %s', station_name)
+            except Exception as e:
+                log('Cannot get trains from station %s: %s', station_name, e.message)
 
             for train in arrivals:
                 schedule_ids.add(train['id'])

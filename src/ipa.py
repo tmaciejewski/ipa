@@ -13,7 +13,7 @@ if __name__ == "__main__":
     try:
         command = commands[sys.argv[1]]()
         assert(len(sys.argv[2:]) >= len(command.args))
-    except :
+    except:
         print 'Commands:'
         for c in commands:
             print '\t', commands[c].name, ' '.join(commands[c].args), '--', commands[c].desc
