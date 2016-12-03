@@ -7,6 +7,12 @@ db = {
         "password": "ipapass",
         "database": "ipa"
     },
+    "dev": {
+        "host": "127.0.0.1",
+        "user": "ipa",
+        "password": "ipapass",
+        "database": "ipa_dev"
+    },
     "test": {
         "host": "127.0.0.1",
         "user": "ipa",

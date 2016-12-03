@@ -18,5 +18,5 @@ if __name__ == "__main__":
         for c in commands:
             print '\t', commands[c].name, ' '.join(commands[c].args), '--', commands[c].desc
     else:
-        database = ipa_db.Db(ipa_config.db['prod'])
+        database = ipa_db.Db(ipa_config.db['dev'])
         command.run(database, sys.argv[2:])
