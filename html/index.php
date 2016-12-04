@@ -15,7 +15,7 @@ require 'db.php';
 $db = new Db();
 $res = $db->get_trains();
 while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    echo '        <span><a href="train/' . $row['train_name'] . '">' . $row['train_name'] . "</a></span>\n";
+    echo '        <span><a href="train/' . $row['train_name'] . '">' . join('&nbsp;', split(' ', $row['train_name'])) . "</a></span>\n";
 }
 ?>
 
