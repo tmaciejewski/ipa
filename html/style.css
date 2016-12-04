@@ -1,0 +1,48 @@
+body {
+    line-height: 2em;
+    text-align: justify;
+}
+
+span {
+    margin: 5px;
+}
+
+table {
+    table-layout: fixed;
+    width: 300px;
+    text-align: center;
+    font-size: 14px;
+}
+
+td, th {
+    padding: 5px;
+    width: 200px;
+}
+
+th {
+    background-color: #aaa;
+}
+
+th:empty {
+    background-color: #fff;
+}
+
+.normal {
+    background-color: #96fe9e;
+}
+
+.minor {
+    background-color: #fffd52;
+}
+
+.moderate {
+    background-color: #ffb452;
+}
+
+.critical {
+    background-color: red;
+}
+
+.timestamp {
+    font-style: italic;
+}

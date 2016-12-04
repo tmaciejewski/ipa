@@ -6,17 +6,47 @@ class Db {
     private $password = 'ipapass';
     private $database = 'ipa';
 
-    private $mysqli;
-   
+    private $pdo;
+
     public function __construct()
     {
-        $this->mysqli = new mysqli($this->host, $this->user, $this->password, $this->database);
-        $this->mysqli->set_charset('utf8');
+        $this->pdo = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->database . ';charset=utf8',
+                             $this->user, $this->password);
     }
 
     public function get_trains()
     {
-        return $this->mysqli->query('SELECT * FROM train ORDER BY train_name');
+        return $this->pdo->query('SELECT * FROM train ORDER BY train_name');
+    }
+
+    public function get_train($train_name)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM train WHERE train_name = :name');
+        $stmt->execute(array('name' => $train_name));
+        return $stmt;
+    }
+
+    public function get_max_stop_number($train_id)
+    {
+        $stmt = $this->pdo->prepare('SELECT MAX(stop_number) AS max FROM schedule WHERE train_id = :id');
+        $stmt->execute(array('id' => $train_id));
+        return $stmt;
+    }
+
+    public function get_schedules($train_id)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id');
+        $stmt->execute(array('id' => $train_id));
+        return $stmt;
+    }
+
+    public function get_schedule_infos($schedule_id)
+    {
+        $stmt = $this->pdo->prepare('SELECT station_name, date_format(departure_time, "%k:%i:%s") AS departure_time,
+                                            departure_delay, date_format(arrival_time, "%k:%i:%s") AS arrival_time, arrival_delay
+                                     FROM schedule_info INNER JOIN station USING (station_id) WHERE schedule_id = :id');
+        $stmt->execute(array('id' => $schedule_id));
+        return $stmt;
     }
 }
 

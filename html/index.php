@@ -14,10 +14,12 @@ require 'db.php';
 
 $db = new Db();
 $res = $db->get_trains();
-while ($row = $res->fetch_assoc()) {
-    echo '        <span><a href="' . $row['train_name'] . '">' . $row['train_name'] . "</a></span>\n";
+while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+    echo '        <span><a href="train/' . $row['train_name'] . '">' . $row['train_name'] . "</a></span>\n";
 }
 ?>
 
+        <hr>
+        <small><a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a></small>
     </body>
 </html>
