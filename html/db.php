@@ -35,7 +35,7 @@ class Db {
 
     public function get_schedules($train_id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id');
+        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC');
         $stmt->execute(array('id' => $train_id));
         return $stmt;
     }
@@ -44,7 +44,7 @@ class Db {
     {
         $stmt = $this->pdo->prepare('SELECT station_name, date_format(departure_time, "%k:%i:%s") AS departure_time,
                                             departure_delay, date_format(arrival_time, "%k:%i:%s") AS arrival_time, arrival_delay
-                                     FROM schedule_info INNER JOIN station USING (station_id) WHERE schedule_id = :id');
+                                     FROM schedule_info INNER JOIN station USING (station_id) WHERE schedule_id = :id ORDER BY stop_number');
         $stmt->execute(array('id' => $schedule_id));
         return $stmt;
     }
