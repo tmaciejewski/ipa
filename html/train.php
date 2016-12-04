@@ -65,7 +65,7 @@ function make_time_row($schedule_infos)
             echo '<p class="arr">---</p>';
 
         if ($info['departure_time'] != '')
-            echo '<p class="dep">' .  $info['departure_time'] . ' (' . $info['departure_delay'] . ') &#8594;</p>';
+            echo '<p class="dep">' .  $info['departure_time'] . ' (' . $info['departure_delay'] . ' min) &#8594;</p>';
         else
             echo '<p class="dep">---</p>';
 

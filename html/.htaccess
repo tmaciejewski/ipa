@@ -1,0 +1,2 @@
+RewriteEngine  on
+RewriteRule    "train/(.*)$"  "train.php?name=$1"
