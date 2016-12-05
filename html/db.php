@@ -42,8 +42,8 @@ class Db {
 
     public function get_schedule_infos($schedule_id)
     {
-        $stmt = $this->pdo->prepare('SELECT station_name, date_format(departure_time, "%k:%i:%s") AS departure_time,
-                                            departure_delay, date_format(arrival_time, "%k:%i:%s") AS arrival_time, arrival_delay
+        $stmt = $this->pdo->prepare('SELECT station_name, date_format(departure_time, "%k:%i") AS departure_time,
+                                            departure_delay, date_format(arrival_time, "%k:%i") AS arrival_time, arrival_delay
                                      FROM schedule_info INNER JOIN station USING (station_id) WHERE schedule_id = :id ORDER BY stop_number');
         $stmt->execute(array('id' => $schedule_id));
         return $stmt;
