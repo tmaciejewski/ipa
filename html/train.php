@@ -12,7 +12,7 @@ $train or die('No train');
    <head>
        <title><?php echo $name ?> - archiwum opóźnień pociągów</title>
        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-       <link rel="stylesheet" href="../style.css" type="text/css" />
+       <link rel="stylesheet" href="/style.css" type="text/css" />
    </head>
    <body>
        <h1><?php echo $name ?></h1>
@@ -85,6 +85,9 @@ while ($schedule = $schedules->fetch(PDO::FETCH_ASSOC)) {
 ?>
         </table>
         <hr>
-        <small><a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a></small>
+        <small>
+            <a href="http://old.ipa.lovethosetrains.com">old version</a> |
+            <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
+        </small>
     </body>
 </html>
