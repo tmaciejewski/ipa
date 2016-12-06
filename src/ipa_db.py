@@ -1,6 +1,10 @@
 import mysql.connector
 import ipa_db_schema
 
+class DbError(Exception):
+    def __init__(self, message):
+        super(DbError, self).__init__(message)
+
 class Db:
     def __init__(self, db_config):
         self.conn = mysql.connector.connect(**db_config)
@@ -10,8 +14,12 @@ class Db:
 
     def _execute(self, sql, args = tuple()):
         c = self.conn.cursor()
-        c.execute(sql, args)
-        return c
+        try:
+            c.execute(sql, args)
+        except Exception as e:
+            raise DbError(e.message)
+        else:
+            return c
 
     def _format_select(self, cursor):
         names = [desc[0] for desc in cursor.description]

@@ -2,7 +2,7 @@ class Train:
     drop = 'DROP TABLE IF EXISTS train'
     create = '''CREATE TABLE train(
         train_id INTEGER NOT NULL AUTO_INCREMENT,
-        train_name VARCHAR(100),
+        train_name VARCHAR(100) UNIQUE,
         PRIMARY KEY(train_id)
     ) CHARACTER SET utf8'''
 
@@ -20,7 +20,7 @@ class Station:
     drop = 'DROP TABLE IF EXISTS station'
     create = '''CREATE TABLE station(
         station_id INTEGER NOT NULL AUTO_INCREMENT,
-        station_name VARCHAR(100),
+        station_name VARCHAR(100) UNIQUE,
         PRIMARY KEY (station_id)
     ) CHARACTER SET utf8'''
 

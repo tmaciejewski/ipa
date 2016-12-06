@@ -27,6 +27,14 @@ class TestDb(unittest.TestCase):
         self.assertEqual(list(self.db.get_trains()), [{'train_id': 2, 'train_name': name[1]},
                                                       {'train_id': 1, 'train_name': name[0]}])
 
+    def test_train_name_uniqueness(self):
+        name = 'train'
+        self.db.add_train(name)
+        with self.assertRaises(ipa_db.DbError):
+            self.db.add_train(name)
+        self.db.commit()
+        self.assertEqual(list(self.db.get_train_id(name)), [{'train_id': 1}])
+
     def test_adding_stations(self):
         name = ['station', 'other station']
 
@@ -36,6 +44,14 @@ class TestDb(unittest.TestCase):
 
         self.assertEqual(list(self.db.get_station_id(name[0])), [{'station_id': 1}])
         self.assertEqual(list(self.db.get_station_id(name[1])), [{'station_id': 2}])
+
+    def test_station_name_uniqueness(self):
+        name = 'station'
+        self.db.add_station(name)
+        with self.assertRaises(ipa_db.DbError):
+            self.db.add_station(name)
+        self.db.commit()
+        self.assertEqual(list(self.db.get_station_id(name)), [{'station_id': 1}])
 
     def test_updating_schedules(self):
         schedule_id = 123
