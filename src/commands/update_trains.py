@@ -31,13 +31,16 @@ class UpdateTrains:
         for station_name in ipa_config.stations:
             station_id = ipa_config.stations[station_name]
             arrivals = []
+            departures = []
             try:
-                arrivals, _ = station_api.get_station(station_id)
+                arrivals, departures = station_api.get_station(station_id)
                 log('Visitied station %s', station_name)
             except Exception as e:
                 log('Cannot get trains from station %s: %s', station_name, e.message)
 
             for train in arrivals:
+                schedule_ids.add(train['id'])
+            for train in departures:
                 schedule_ids.add(train['id'])
 
         return schedule_ids
