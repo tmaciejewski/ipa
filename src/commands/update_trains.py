@@ -45,7 +45,6 @@ class UpdateTrains:
     def update_train_schedule(self, db, schedule_id):
         train = train_api.get_train(schedule_id)
 
-        print train['name'], train['date']
         if train['name'] != None:
             train_id = self.get_train_id(db, train['name'])
 
