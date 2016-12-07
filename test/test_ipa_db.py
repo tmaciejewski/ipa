@@ -17,6 +17,9 @@ class TestDb(unittest.TestCase):
     def test_adding_trains(self):
         name = ['train', 'other train']
 
+        self.assertEqual(list(self.db.get_train_id(name[0])), [])
+        self.assertEqual(list(self.db.get_train_id(name[1])), [])
+
         self.db.add_train(name[0])
         self.db.add_train(name[1])
         self.db.commit()
@@ -37,6 +40,9 @@ class TestDb(unittest.TestCase):
 
     def test_adding_stations(self):
         name = ['station', 'other station']
+
+        self.assertEqual(list(self.db.get_station_id(name[0])), [])
+        self.assertEqual(list(self.db.get_station_id(name[1])), [])
 
         self.db.add_station(name[0])
         self.db.add_station(name[1])
@@ -60,6 +66,8 @@ class TestDb(unittest.TestCase):
         train_name = "train name"
         expected_schedule = {'schedule_id': schedule_id, 'schedule_date': schedule_date,
                              'train_id': train_id, 'train_name': train_name, 'active': 1}
+
+        self.assertEqual(list(self.db.get_schedules(train_id)), [])
 
         self.db.add_train(train_name)
         self.db.update_schedule(schedule_id, str(schedule_date), train_id)
@@ -98,6 +106,8 @@ class TestDb(unittest.TestCase):
             {'arrival_time': '2016-12-21 12:10:10', 'arrival_delay': 0,
              'departure_time': None, 'departure_delay': None},
         ]
+
+        self.assertEqual(list(self.db.get_schedule_infos(schedule_id)), [])
 
         self.db.add_station('station 1')
         self.db.add_station('station 2')
