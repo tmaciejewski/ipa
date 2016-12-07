@@ -1,7 +1,7 @@
 import datetime
 
-import station
-import train
+import station_api
+import train_api
 import ipa_config
 
 def log(msg, *args):
@@ -32,7 +32,7 @@ class UpdateTrains:
             station_id = ipa_config.stations[station_name]
             arrivals = []
             try:
-                arrivals, _ = station.get_station(station_id)
+                arrivals, _ = station_api.get_station(station_id)
                 log('Visitied station %s', station_name)
             except Exception as e:
                 log('Cannot get trains from station %s: %s', station_name, e.message)
@@ -43,18 +43,17 @@ class UpdateTrains:
         return schedule_ids
 
     def update_train_schedule(self, db, schedule_id):
-        schedule_info = train.get_train(schedule_id)
+        train = train_api.get_train(schedule_id)
 
-        if schedule_info != []:
-            train_name = schedule_info[0]['name']
-            schedule_date = schedule_info[0]['date']
-            train_id = self.get_train_id(db, train_name)
+        print train['name'], train['date']
+        if train['name'] != None:
+            train_id = self.get_train_id(db, train['name'])
 
-            db.update_schedule(schedule_id, schedule_date, train_id)
-            for i in range(len(schedule_info)):
-                self.update_train_schedule_info(db, schedule_id, i, schedule_info[i])
+            db.update_schedule(schedule_id, train['date'], train_id)
+            for i in range(len(train['info'])):
+                self.update_train_schedule_info(db, schedule_id, i, train['info'][i])
 
-            log('Updated train schedule %s %s', schedule_id, train_name)
+            log('Updated train schedule %s %s', schedule_id, train['name'])
         else:
             db.mark_as_inactive(schedule_id)
             log('Mark %s as inactive train', schedule_id)

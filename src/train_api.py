@@ -13,6 +13,10 @@ def fetch_html(train_id):
 
     return connection.getresponse().read()
 
+def format_date(date):
+    [d, m, y] = date.split('.')
+    return '%s-%s-%s' % (y, m, d)
+
 def get_simple_field(columns, index):
     field = columns[index].span.string
     return field.strip() if field else ''
@@ -33,8 +37,7 @@ def get_train_name(columns):
         return number
 
 def get_train_date(columns):
-    [d, m, y] = get_simple_field(columns, 1).split('.')
-    return '%s-%s-%s' % (y, m, d)
+    return format_date(get_simple_field(columns, 1))
 
 def get_train_relation(columns):
     [start, stop] = columns[2].span.string.split('-')
@@ -57,13 +60,20 @@ def get_train_dep_delay(columns):
     return get_delay_field(columns, 7)
 
 def get_train(train_id):
-    result = []
+    result = {'info': []}
     html = fetch_html(train_id)
     soup = BeautifulSoup(html, 'html.parser')
 
+    try:
+        title = soup.find_all('div', class_ = 'table-responsive')[0].find_all('div')[0].contents[0]
+        result['name'] = ' '.join(title.split()[1:-2])
+        result['date'] = format_date(title.split()[-1].strip('.'))
+    except:
+        return {'name': None, 'date': None, 'info': []}
+
     for tr in soup.find_all('tr')[1:]:
         tds = tr.find_all('td')
-        result.append({
+        result['info'].append({
             'name': get_train_name(tds),
             'date': get_train_date(tds),
             'relation': get_train_relation(tds),
@@ -88,4 +98,5 @@ def print_train(rows):
 if __name__ == "__main__":
     train_id = sys.argv[1]
     train = get_train(train_id)
-    print_train(train)
+    print train['name'], train['date']
+    print_train(train['info'])
