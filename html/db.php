@@ -40,6 +40,13 @@ class Db {
         return $stmt;
     }
 
+    public function get_last_schedule($train_id)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC LIMIT 1');
+        $stmt->execute(array('id' => $train_id));
+        return $stmt;
+    }
+
     public function get_schedule_infos($schedule_id)
     {
         $stmt = $this->pdo->prepare('SELECT station_name, departure_time, departure_delay, arrival_time, arrival_delay

@@ -3,6 +3,10 @@ body {
     text-align: justify;
 }
 
+h1 {
+    text-align: center;
+}
+
 span {
     margin: 5px;
 }
@@ -12,6 +16,7 @@ table {
     width: 300px;
     text-align: center;
     font-size: 14px;
+    margin: auto;
 }
 
 td, th {
@@ -45,4 +50,20 @@ th:empty {
 
 .timestamp {
     font-style: italic;
+}
+
+#footer {
+    font-size: small;
+}
+
+#main {
+    line-height: 2em;
+}
+
+#main tr:nth-child(even) {
+    background-color: #9e9;
+}
+
+#main tr:nth-child(odd) {
+    background-color: #6c6;
 }

@@ -6,21 +6,35 @@
     </head>
     <body>
         <h1>InfoPasazer Archiver</h1>
-
+        <table id="main">
+        <tr><th>Nazwa</th><th>Skąd</th><th>Dokąd</th></tr>
 <?php
 require 'db.php';
+
+$starttime = microtime(true);
 
 $db = new Db();
 $res = $db->get_trains();
 while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    echo '        <span><a href="train/' . $row['train_name'] . '">' . join('&nbsp;', split(' ', $row['train_name'])) . "</a></span>\n";
+    $last_schedule = $db->get_last_schedule($row['train_id'])->fetch(PDO::FETCH_ASSOC);
+    $schedule_infos = $db->get_schedule_infos($last_schedule['schedule_id'])->fetchAll();
+    echo '        <tr><td>';
+    echo '<a href="train/' . $row['train_name'] . '">' . $row['train_name'] . '</a>';
+    echo '</td><td>';
+    echo $schedule_infos[0]['station_name'];
+    echo '</td><td>';
+    echo end($schedule_infos)['station_name'];
+    echo "</td></tr>\n";
 }
 ?>
-
+        </table>
         <hr>
-        <small>
-            <a href="http://old.ipa.lovethosetrains.com">old version</a> |
-            <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
-        </small>
+        <div id="footer">
+            <p>
+                <a href="http://old.ipa.lovethosetrains.com">old version</a> |
+                <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
+            </p>
+        </div>
     </body>
 </html>
+<!-- Generated in <?php echo round(microtime(true) - $starttime, 2); ?> seconds -->

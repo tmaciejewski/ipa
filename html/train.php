@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
 
+$starttime = microtime(true);
 $date_freq = 10;
 $name = htmlspecialchars($_GET["name"]);
 $db = new Db();
@@ -89,9 +90,12 @@ while ($schedule = $schedules->fetch(PDO::FETCH_ASSOC)) {
 ?>
         </table>
         <hr>
-        <small>
-            <a href="http://old.ipa.lovethosetrains.com">old version</a> |
-            <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
-        </small>
+        <div id="footer">
+            <p>
+                <a href="http://old.ipa.lovethosetrains.com">old version</a> |
+                <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
+            </p>
+        </div>
     </body>
 </html>
+<!-- Generated in <?php echo round(microtime(true) - $starttime, 2); ?> seconds -->
