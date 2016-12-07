@@ -59,15 +59,19 @@ function make_time_row($schedule_infos)
     foreach ($schedule_infos as $info) {
         echo '<td class="' . get_delay_class($info) . '">';
 
-        if ($info['arrival_time'] != '')
-            echo '<p class="arr">&#8594; ' . $info['arrival_time'] . ' (' . $info['arrival_delay'] . ' min)</p>';
-        else
+        if ($info['arrival_time'] != '') {
+            $arrival_time = date_format(date_create($info['arrival_time']), 'H:i');
+            echo '<p class="arr">&#8594; ' . $arrival_time . ' (' . $info['arrival_delay'] . ' min)</p>';
+        } else {
             echo '<p class="arr">---</p>';
+        }
 
-        if ($info['departure_time'] != '')
-            echo '<p class="dep">' .  $info['departure_time'] . ' (' . $info['departure_delay'] . ' min) &#8594;</p>';
-        else
+        if ($info['departure_time'] != '') {
+            $departure_time = date_format(date_create($info['departure_time']), 'H:i');
+            echo '<p class="dep">' . $departure_time . ' (' . $info['departure_delay'] . ' min) &#8594;</p>';
+        } else {
             echo '<p class="dep">---</p>';
+        }
 
         echo '</td>';
     }
