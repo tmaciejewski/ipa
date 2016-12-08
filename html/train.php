@@ -93,7 +93,7 @@ while ($schedule = $schedules->fetch(PDO::FETCH_ASSOC)) {
         <div id="footer">
             <p>
                 <a href="http://old.ipa.lovethosetrains.com">old version</a> |
-                <a href="https://github.com/tmaciejewski/ipa">Source on GitHub</a>
+                <a href="https://github.com/tmaciejewski/ipa">source on GitHub</a>
             </p>
         </div>
     </body>
