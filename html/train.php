@@ -65,14 +65,14 @@ function make_time_row($schedule_infos)
             $arrival_time = date_format(date_create($info['arrival_time']), 'H:i');
             echo '<p class="arr">&#8594; ' . $arrival_time . ' (' . $info['arrival_delay'] . ' min)</p>';
         } else {
-            echo '<p class="arr">---</p>';
+            echo '<p class="arr">&#8212;</p>';
         }
 
         if ($info['departure_time'] != '') {
             $departure_time = date_format(date_create($info['departure_time']), 'H:i');
             echo '<p class="dep">' . $departure_time . ' (' . $info['departure_delay'] . ' min) &#8594;</p>';
         } else {
-            echo '<p class="dep">---</p>';
+            echo '<p class="dep">&#8212;</p>';
         }
 
         echo '</td>';
