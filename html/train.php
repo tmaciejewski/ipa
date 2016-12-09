@@ -10,14 +10,15 @@ $train = $db->get_train($name)->fetch(PDO::FETCH_ASSOC);
 $train or die('No train');
 ?>
 <html>
-   <head>
-       <title><?php echo $name ?> - archiwum opóźnień pociągów</title>
-       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-       <link rel="stylesheet" href="/style.css" type="text/css" />
-   </head>
-   <body>
-       <h1><?php echo $name ?></h1>
-       <table>
+    <head>
+        <title><?php echo $name ?> - archiwum opóźnień pociągów</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="/style.css" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"/>
+    </head>
+    <body>
+        <h1><?php echo $name ?></h1>
+        <table>
 
 <?php
 

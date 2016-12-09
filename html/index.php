@@ -3,9 +3,10 @@
         <title>InfoPasażer Archiver - archiwum opóźnień pociągów</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" href="/style.css" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"/>
     </head>
     <body>
-        <h1>InfoPasazer Archiver</h1>
+        <h1>InfoPasażer Archiver</h1>
         <h5>(<a href="http://old.ipa.lovethosetrains.com">old version</a>)</h5>
         <table id="main">
         <tr><th>Nazwa</th><th>Skąd</th><th>Dokąd</th></tr>
