@@ -19,10 +19,11 @@ class UpdateTrains:
 
         for schedule_id in schedule_ids:
             try:
-                log('Updating train schedule %s', schedule_id)
+                log('Updating train schedule %d', schedule_id)
                 self.update_train_schedule(db, schedule_id)
             except Exception as e:
-                log('Failed to update train schedule %s: %s', schedule_id, e.message)
+                print e
+                log('Failed to update train schedule %d: %s', schedule_id, str(e))
 
         db.commit()
 
@@ -35,9 +36,10 @@ class UpdateTrains:
             departures = []
             try:
                 arrivals, departures = station_api.get_station(station_id)
-                log('Visitied station %s', station_name)
+                log('Visitied station %s', station_name.encode('utf-8'))
             except Exception as e:
-                log('Cannot get trains from station %s: %s', station_name, e.message)
+                print e
+                log('Cannot get trains from station %s: %s', station_name.encode('utf-8'), str(e))
 
             for train in arrivals:
                 try:
@@ -62,10 +64,10 @@ class UpdateTrains:
             for i in range(len(train['info'])):
                 self.update_train_schedule_info(db, schedule_id, i, train['info'][i])
 
-            log('Updated train schedule %s %s', schedule_id, train['name'])
+            log('Updated train schedule %d %s', schedule_id, train['name'].encode('utf-8'))
         else:
             db.mark_as_inactive(schedule_id)
-            log('Mark %s as inactive train', schedule_id)
+            log('Mark %d as inactive train', schedule_id)
 
     def get_train_id(self, db, train_name):
         result = list(db.get_train_id(train_name))
