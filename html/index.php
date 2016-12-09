@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>InfoPasażer Archiver</h1>
-        <h5>(<a href="http://old.ipa.lovethosetrains.com">old version</a>)</h5>
+        <h5>(<a href="http://old.ipa.lovethosetrains.com">poprzednia wersja</a>)</h5>
         <table id="main">
         <tr><th>Numer pociągu</th><th>Skąd</th><th>Dokąd</th></tr>
 <?php
