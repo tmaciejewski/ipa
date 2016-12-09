@@ -19,6 +19,7 @@ class UpdateTrains:
 
         for schedule_id in schedule_ids:
             try:
+                log('Updating train schedule %s', schedule_id)
                 self.update_train_schedule(db, schedule_id)
             except Exception as e:
                 log('Failed to update train schedule %s: %s', schedule_id, e.message)
@@ -39,9 +40,15 @@ class UpdateTrains:
                 log('Cannot get trains from station %s: %s', station_name, e.message)
 
             for train in arrivals:
-                schedule_ids.add(train['id'])
+                try:
+                    schedule_ids.add(int(train['id']))
+                except:
+                    pass
             for train in departures:
-                schedule_ids.add(train['id'])
+                try:
+                    schedule_ids.add(int(train['id']))
+                except:
+                    pass
 
         return schedule_ids
 
