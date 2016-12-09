@@ -16,7 +16,8 @@ class Db {
 
     public function get_trains()
     {
-        return $this->pdo->query('SELECT * FROM train ORDER BY train_name');
+        return $this->pdo->query('SELECT train_name, MAX(schedule_id) AS last_schedule_id FROM schedule
+                                  JOIN train USING (train_id) GROUP BY train_id ORDER BY train_name');
     }
 
     public function get_train($train_name)

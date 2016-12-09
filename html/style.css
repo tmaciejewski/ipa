@@ -7,6 +7,13 @@ h1 {
     text-align: center;
 }
 
+h5 {
+    text-align: center;
+    font-size: small;
+    font-style: italic;
+    margin-top: -20px;
+}
+
 span {
     margin: 5px;
 }

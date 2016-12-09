@@ -6,6 +6,7 @@
     </head>
     <body>
         <h1>InfoPasazer Archiver</h1>
+        <h5>(<a href="http://old.ipa.lovethosetrains.com">old version</a>)</h5>
         <table id="main">
         <tr><th>Nazwa</th><th>Skąd</th><th>Dokąd</th></tr>
 <?php
@@ -16,8 +17,7 @@ $starttime = microtime(true);
 $db = new Db();
 $res = $db->get_trains();
 while ($train = $res->fetch(PDO::FETCH_ASSOC)) {
-    $last_schedule = $db->get_schedules($train['train_id'])->fetch(PDO::FETCH_ASSOC);
-    $schedule_infos = $db->get_schedule_infos($last_schedule['schedule_id'])->fetchAll();
+    $schedule_infos = $db->get_schedule_infos($train['last_schedule_id'])->fetchAll();
     echo '        <tr><td>';
     echo '<a href="train/' . $train['train_name'] . '">' . $train['train_name'] . '</a>';
     echo '</td><td>';
@@ -31,7 +31,6 @@ while ($train = $res->fetch(PDO::FETCH_ASSOC)) {
         <hr>
         <div id="footer">
             <p>
-                <a href="http://old.ipa.lovethosetrains.com">old version</a> |
                 <a href="https://github.com/tmaciejewski/ipa">source on GitHub</a>
             </p>
         </div>
