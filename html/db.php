@@ -35,14 +35,7 @@ class Db {
 
     public function get_schedules($train_id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC');
-        $stmt->execute(array('id' => $train_id));
-        return $stmt;
-    }
-
-    public function get_last_schedule($train_id)
-    {
-        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC LIMIT 1');
+        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC, schedule_id DESC');
         $stmt->execute(array('id' => $train_id));
         return $stmt;
     }

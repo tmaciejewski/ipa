@@ -15,11 +15,11 @@ $starttime = microtime(true);
 
 $db = new Db();
 $res = $db->get_trains();
-while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    $last_schedule = $db->get_last_schedule($row['train_id'])->fetch(PDO::FETCH_ASSOC);
+while ($train = $res->fetch(PDO::FETCH_ASSOC)) {
+    $last_schedule = $db->get_schedules($train['train_id'])->fetch(PDO::FETCH_ASSOC);
     $schedule_infos = $db->get_schedule_infos($last_schedule['schedule_id'])->fetchAll();
     echo '        <tr><td>';
-    echo '<a href="train/' . $row['train_name'] . '">' . $row['train_name'] . '</a>';
+    echo '<a href="train/' . $train['train_name'] . '">' . $train['train_name'] . '</a>';
     echo '</td><td>';
     echo $schedule_infos[0]['station_name'];
     echo '</td><td>';
