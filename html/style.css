@@ -33,7 +33,9 @@ td, th {
 }
 
 th {
-    background-color: #aaa;
+    background-color: #0076c8;
+    color: #fff;
+    font-weight: normal;
 }
 
 th:empty {
@@ -74,4 +76,8 @@ th:empty {
 
 #main tr:nth-child(odd) {
     background-color: #6c6;
+}
+
+.date {
+    font-size: 20px;
 }

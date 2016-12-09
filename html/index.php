@@ -9,7 +9,7 @@
         <h1>InfoPasażer Archiver</h1>
         <h5>(<a href="http://old.ipa.lovethosetrains.com">old version</a>)</h5>
         <table id="main">
-        <tr><th>Nazwa</th><th>Skąd</th><th>Dokąd</th></tr>
+        <tr><th>Numer pociągu</th><th>Skąd</th><th>Dokąd</th></tr>
 <?php
 require 'db.php';
 
