@@ -1,22 +1,12 @@
 body {
-    line-height: 2em;
-    text-align: justify;
+    text-align: center;
     font-family: 'PT Sans'; sans-serif;
 }
 
-h1 {
-    text-align: center;
-}
-
 h5 {
-    text-align: center;
     font-size: small;
     font-style: italic;
     margin-top: -20px;
-}
-
-span {
-    margin: 5px;
 }
 
 table {
@@ -58,12 +48,9 @@ th:empty {
     background-color: red;
 }
 
-.timestamp {
-    font-style: italic;
-}
-
 #footer {
     font-size: small;
+    text-align: left;
 }
 
 #main {
@@ -80,4 +67,9 @@ th:empty {
 
 .date {
     font-size: 20px;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: -10px;
 }
