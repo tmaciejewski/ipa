@@ -59,8 +59,9 @@ class UpdateTrains:
 
         if train['name'] != None:
             train_id = self.get_train_id(db, train['name'])
+            schedule_date = train['info'][0]['date']
 
-            db.update_schedule(schedule_id, train['date'], train_id)
+            db.update_schedule(schedule_id, schedule_date, train_id)
             for i in range(len(train['info'])):
                 self.update_train_schedule_info(db, schedule_id, i, train['info'][i])
 
