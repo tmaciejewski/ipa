@@ -61,13 +61,18 @@ class UpdateTrains:
             train_id = self.get_train_id(db, train['name'])
             schedule_date = train['info'][0]['date']
 
-            db.update_schedule(schedule_id, schedule_date, train_id)
+            if list(db.get_schedule_infos(schedule_id)) == []:
+                log('Add train schedule %d %s', schedule_id, train['name'].encode('utf-8'))
+                db.update_schedule(schedule_id, schedule_date, train_id)
+            else:
+                db.set_active(schedule_date, True)
+
             for i in range(len(train['info'])):
                 self.update_train_schedule_info(db, schedule_id, i, train['info'][i])
 
             log('Updated train schedule %d %s', schedule_id, train['name'].encode('utf-8'))
         else:
-            db.mark_as_inactive(schedule_id)
+            db.set_active(schedule_id, False)
             log('Mark %d as inactive train', schedule_id)
 
     def get_train_id(self, db, train_name):

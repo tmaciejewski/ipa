@@ -87,11 +87,11 @@ class TestDb(unittest.TestCase):
         self.db.commit()
         self.assertEqual(list(self.db.get_active_schedules()), [expected_schedule])
 
-        self.db.mark_as_inactive(schedule_id)
+        self.db.set_active(schedule_id, False)
         self.db.commit()
         self.assertEqual(list(self.db.get_active_schedules()), [])
 
-        self.db.update_schedule(schedule_id, str(schedule_date), train_id)
+        self.db.set_active(schedule_id, True)
         self.db.commit()
         self.assertEqual(list(self.db.get_active_schedules()), [expected_schedule])
 

@@ -47,8 +47,9 @@ class Db:
     def get_active_schedules(self):
         return self.select_query('SELECT * FROM schedule WHERE active = 1')
 
-    def mark_as_inactive(self, schedule_id):
-        self._execute('''UPDATE schedule SET active = 0 WHERE schedule_id = %s''', (schedule_id,))
+    def set_active(self, schedule_id, active):
+        active_value = 1 if active else 0
+        self._execute('''UPDATE schedule SET active = %s WHERE schedule_id = %s''', (active_value, schedule_id))
 
     def add_train(self, train_name):
         self._execute('''INSERT INTO train VALUES('', %s)''', (train_name,))
