@@ -1,3 +1,3 @@
 RewriteEngine  on
 RewriteRule    "train/(.*)$"  "train.php?name=$1"
-RewriteRule    "(.*).html$"  "old.php?name=$1"
+RewriteRule    "^([0-9].*).html$"  "old.php?name=$1"
