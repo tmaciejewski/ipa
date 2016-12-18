@@ -17,7 +17,7 @@ $train or die('No train');
         <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"/>
     </head>
     <body>
-        <h1><?php echo $name ?></h1>
+        <h1><div><a href="/">&lt;&lt;</a></div> <?php echo $name ?></h1>
         <table>
 
 <?php

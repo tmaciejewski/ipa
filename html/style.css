@@ -3,6 +3,11 @@ body {
     font-family: 'PT Sans'; sans-serif;
 }
 
+h1 div {
+    position: absolute;
+    left: 10px;
+}
+
 h5 {
     font-size: small;
     font-style: italic;
