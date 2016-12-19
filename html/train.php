@@ -34,7 +34,7 @@ function make_station_row($schedule_infos, $date, $date_freq, $stations_width)
         $i += 1;
     }
 
-    while ($i < $stations_width) {
+    while ($i <= $stations_width) {
         echo '<th rowspan=2 class="date"></th>';
         $i += 1;
     }
@@ -80,7 +80,7 @@ function make_time_row($schedule_infos)
     echo "</tr>\n";
 }
 
-$stations_width = $db->get_max_stop_number($train_id)->fetch(PDO::FETCH_ASSOC)['max'];
+$stations_width = $db->get_max_stop_number($train['train_id'])->fetch(PDO::FETCH_ASSOC)['max'];
 
 $schedules = $db->get_schedules($train['train_id']);
 while ($schedule = $schedules->fetch(PDO::FETCH_ASSOC)) {

@@ -29,7 +29,7 @@ class Db {
 
     public function get_max_stop_number($train_id)
     {
-        $stmt = $this->pdo->prepare('SELECT MAX(stop_number) AS max FROM schedule WHERE train_id = :id');
+        $stmt = $this->pdo->prepare('SELECT MAX(stop_number) AS max FROM schedule JOIN schedule_info USING (schedule_id) WHERE train_id = :id');
         $stmt->execute(array('id' => $train_id));
         return $stmt;
     }
