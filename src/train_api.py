@@ -40,7 +40,7 @@ def get_train_date(columns):
     return format_date(get_simple_field(columns, 1))
 
 def get_train_relation(columns):
-    [start, stop] = columns[2].span.string.split('-')
+    [start, stop] = columns[2].span.string.split(' - ')
     return start.strip() + ' - ' + stop.strip()
 
 def get_train_stop_name(columns):
