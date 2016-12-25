@@ -17,8 +17,8 @@ class Db:
         try:
             c.execute(sql, args)
         except Exception as e:
-            print e
-            raise DbError(e.message)
+            print(e)
+            raise DbError(str(e))
         else:
             return c
 

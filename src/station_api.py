@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import httplib
+import http.client
 import sys
 from bs4 import BeautifulSoup
 import ipa_config
@@ -8,7 +8,7 @@ import ipa_config
 def fetch_html(train_id):
     train_request = "/?p=station&id=" + str(train_id)
 
-    connection = httplib.HTTPConnection(ipa_config.domain)
+    connection = http.client.HTTPConnection(ipa_config.domain)
     connection.request('GET', train_request)
 
     return connection.getresponse().read()
@@ -80,22 +80,22 @@ def get_station(station_id):
 def print_station(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join([row['id'], row['name'], row['operator'], row['date'],
-                              row['relation'], row['time'], row['delay']])
+            print(' | '.join([row['id'], row['name'], row['operator'], row['date'],
+                              row['relation'], row['time'], row['delay']]))
         else:
-            print row[0]
+            print(row[0])
 
 
 if __name__ == "__main__":
     station_id = sys.argv[1]
     arrivals, departues = get_station(station_id)
 
-    print 'PRZYJAZDY'
-    print '---------------------------------'
+    print('PRZYJAZDY')
+    print('---------------------------------')
     print_station(arrivals)
 
-    print
-    print
-    print 'ODJAZDY'
-    print '---------------------------------'
+    print()
+    print()
+    print('ODJAZDY')
+    print('---------------------------------')
     print_station(departues)

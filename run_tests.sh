@@ -1,3 +1,3 @@
 #!/bin/sh
 
-PYTHONPATH=src python -m unittest discover test -v
+PYTHONPATH=src python3 -m unittest discover test -v

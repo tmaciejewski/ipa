@@ -12,7 +12,7 @@ This project consists of three things:
 
 ## Requirements
 
-Python 2.7 is used as main language with BeautifulSoup and MySQL connnector. Data is stored in MySQL Server 5.5.
+Python 3.4 is used as main language with BeautifulSoup and MySQL connnector. Data is stored in MySQL Server 5.5.
 Frontend is served by Apache 2.4 using PHP 5.6.
 
 ## Using as a CLI tool

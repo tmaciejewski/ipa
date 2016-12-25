@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import httplib
+import http.client
 import sys
 from bs4 import BeautifulSoup
 import ipa_config
@@ -8,7 +8,7 @@ import ipa_config
 def fetch_html(train_id):
     train_request = "/?p=train&id=" + str(train_id)
 
-    connection = httplib.HTTPConnection(ipa_config.domain)
+    connection = http.client.HTTPConnection(ipa_config.domain)
     connection.request('GET', train_request)
 
     return connection.getresponse().read()
@@ -89,14 +89,14 @@ def get_train(train_id):
 def print_train(rows):
     for row in rows:
         if (len(row) > 1):
-            print ' | '.join([row['name'], row['date'], row['relation'], row['stop_name'],
+            print(' | '.join([row['name'], row['date'], row['relation'], row['stop_name'],
                               row['arrival_time'], row['arrival_delay'], row['departure_time'],
-                              row['departure_delay']])
+                              row['departure_delay']]))
         else:
-            print row[0]
+            print(row[0])
 
 if __name__ == "__main__":
     train_id = sys.argv[1]
     train = get_train(train_id)
-    print train['name'], train['date']
+    print(train['name'], train['date'])
     print_train(train['info'])

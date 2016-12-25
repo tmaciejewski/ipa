@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 
@@ -12,9 +12,9 @@ if __name__ == "__main__":
         command = commands[sys.argv[1]]()
         assert(len(sys.argv[2:]) >= len(command.args))
     except:
-        print 'Commands:'
+        print('Commands:')
         for c in commands:
-            print '\t', commands[c].name, ' '.join(commands[c].args), '--', commands[c].desc
+            print('\t', commands[c].name, ' '.join(commands[c].args), '--', commands[c].desc)
     else:
         database = ipa_db.Db(ipa_config.db['dev'])
         command.run(database, sys.argv[2:])

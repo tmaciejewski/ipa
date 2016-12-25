@@ -5,4 +5,4 @@ class PrintTrains:
 
     def run(self, db, _):
         for train in db.get_trains():
-            print train['train_name'].encode('utf-8')
+            print(train['train_name'])

@@ -6,7 +6,7 @@ import ipa_config
 
 def log(msg, *args):
     timestamp = datetime.datetime.now().ctime()
-    print timestamp, msg % args
+    print(timestamp, msg % args)
 
 class UpdateTrains:
     name = 'update_trains'
@@ -22,7 +22,7 @@ class UpdateTrains:
                 log('Updating train schedule %d', schedule_id)
                 self.update_train_schedule(db, schedule_id)
             except Exception as e:
-                print e
+                print(e)
                 log('Failed to update train schedule %d: %s', schedule_id, str(e))
 
         db.commit()
@@ -36,10 +36,10 @@ class UpdateTrains:
             departures = []
             try:
                 arrivals, departures = station_api.get_station(station_id)
-                log('Visitied station %s', station_name.encode('utf-8'))
+                log('Visitied station %s', station_name)
             except Exception as e:
-                print e
-                log('Cannot get trains from station %s: %s', station_name.encode('utf-8'), str(e))
+                print(e)
+                log('Cannot get trains from station %s: %s', station_name, str(e))
 
             for train in arrivals:
                 try:
@@ -62,7 +62,7 @@ class UpdateTrains:
             schedule_date = train['info'][0]['date']
 
             if list(db.get_schedule_infos(schedule_id)) == []:
-                log('Add train schedule %d %s', schedule_id, train['name'].encode('utf-8'))
+                log('Add train schedule %d %s', schedule_id, train['name'])
                 db.update_schedule(schedule_id, schedule_date, train_id)
             else:
                 db.set_active(schedule_date, True)
@@ -70,7 +70,7 @@ class UpdateTrains:
             for i in range(len(train['info'])):
                 self.update_train_schedule_info(db, schedule_id, i, train['info'][i])
 
-            log('Updated train schedule %d %s', schedule_id, train['name'].encode('utf-8'))
+            log('Updated train schedule %d %s', schedule_id, train['name'])
         else:
             db.set_active(schedule_id, False)
             log('Mark %d as inactive train', schedule_id)
