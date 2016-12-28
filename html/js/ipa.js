@@ -10,30 +10,32 @@ var Train = Backbone.Model.extend({
                this.get("from").toLowerCase().indexOf(filter) >= 0 ||
                this.get("to").toLowerCase().indexOf(filter) >= 0;
     }
-
 });
 
 var Trains = Backbone.Collection.extend({
     model: Train,
-
     url: 'api/trains'
 });
 
 var FilterView = Backbone.View.extend({
     el: '#filter',
-
+    timer: null,
+    timeout: 500,
     events: {
-        'keyup': function() { this.trigger('changed', this.$el.val()); }
+        'keyup': function() {
+            var that = this;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(function() {
+                that.trigger('changed', that.$el.val());
+            }, this.timeout);
+        }
     }
 });
 
 var AppView = Backbone.View.extend({
     el: '#main',
-
     template: _.template($('#item-template').html()),
-
     trains: new Trains(),
-
     filterView: new FilterView(),
 
     initialize: function() {
@@ -58,4 +60,3 @@ var AppView = Backbone.View.extend({
 });
 
 var appView = new AppView();
-
