@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require 'api/db.php';
 
 $starttime = microtime(true);
 $date_freq = 10;
