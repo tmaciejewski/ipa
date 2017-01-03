@@ -1,4 +1,3 @@
 RewriteEngine  on
-RewriteRule    "api/([a-z]*)$"  "api/$1.php"
-RewriteRule    "train/(.*)$"  "train.php?name=$1"
-RewriteRule    "^([0-9].*).html$"  "old.php?name=$1"
+RewriteRule    "^train/(.*)$"  "/#train/$1" [R,NE]
+RewriteRule    "^([0-9].*.html)$"  "http://old.ipa.lovethosetrains.com/$1" [R,NE]

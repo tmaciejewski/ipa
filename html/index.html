@@ -6,12 +6,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"/>
     </head>
     <body>
-        <h1>InfoPasażer Archiver</h1>
-        <h5>(<a href="http://old.ipa.lovethosetrains.com">poprzednia wersja</a>)</h5>
-        
-        <p><label for="filter">Filtruj nazwę/skąd/dokąd:</label><input id="filter"></p>
-
-        <div id="main">Wczytywanie pociągów...</div>
+        <div id="page"></div>
 
         <hr>
         <div id="footer">
@@ -20,17 +15,106 @@
             </p>
         </div>
 
-        <script type="text/template" id="item-template">
-            <table id="main">
-                <tr><th>Numer pociągu</th><th>Skąd</th><th>Dokąd</th></tr>
-                <% _.each(trains, function(train) { %>
+        <script type="text/template" id="main-template">
+            <h1>InfoPasażer Archiver</h1>
+            <h5>(<a href="http://old.ipa.lovethosetrains.com">poprzednia wersja</a>)</h5>
+
+            <p><label for="filter">Filtruj nazwę/skąd/dokąd:</label><input id="filter"></p>
+
+            <% if (trains == 'waiting') { %>
+                <img src="img/loader.gif">
+            <% } else if (trains.length == 0)  { %>
+                Nie znaleziono pociągów
+            <% } else { %>
+                <table id="main">
+                    <tr><th>Numer pociągu</th><th>Skąd</th><th>Dokąd</th></tr>
+                    <% _.each(trains, function(train) { %>
+                        <tr>
+                            <td><a href="#train/<%- train.train_name %>"><%- train.train_name %></a></td>
+                            <td><%- train.from %></td>
+                            <td><%- train.to %></td>
+                        </tr>
+                    <% }); %>
+                 </table>
+            <% } %>
+        </script>
+
+        <script type="text/template" id="train-template">
+            <h1><div><a href="#">&lt;&lt;</a></div> <%- train_name %></h1>
+            <table>
+                <%
+                    var getDelayClass = function(info) {
+                       var delay = Math.max(info.arrival_delay, info.departure_delay);
+
+                       if (delay >= 60)
+                           return 'critical';
+                       else if (delay >= 20)
+                           return 'moderate';
+                       else if (delay >= 5)
+                           return 'minor';
+                       else
+                           return 'normal';
+                    };
+
+                    var formatDate = function(date) {
+                        var d = new Date(date);
+                        if (d.getHours() < 10) {
+                            var h = '0' + d.getHours();
+                        } else {
+                            var h = d.getHours();
+                        }
+
+                        if (d.getMinutes() < 10) {
+                            var m = '0' + d.getMinutes();
+                        } else {
+                            var m = d.getMinutes();
+                        }
+
+                        return h + ':' + m;
+                    };
+                %>
+                <% _.each(schedules, function(schedule) { %>
                     <tr>
-                        <td><a href="train/<%- train.id %>"><%- train.id %></a></td>
-                        <td><%- train.from %></td>
-                        <td><%- train.to %></td>
+                        <%
+                            var i = 0;
+                            var date_freq = 10;
+                            _.each(schedule.info, function(info) {
+                                if (i % date_freq == 0) {
+                                    %> <th rowspan=2 class="date"><%- schedule.schedule_date  %></th> <%
+                                }
+                                %> <th><%- info.station_name %></th> <%
+                                i += 1;
+                            });
+                            _.each(_.range(schedule.info.length, max_stations), function() {
+                                %> <th rowspan=2 class="date"></th> <%
+                            });
+                        %>
+                    </tr>
+                    <tr>
+                        <% _.each(schedule.info, function(info) { %>
+                            <td class="<%= getDelayClass(info) %>">
+                                <% if (info.arrival_time) { %>
+                                    <p class="arr">&#8594;
+                                        <%= formatDate(info.arrival_time) %>
+                                        (<%- info.arrival_delay %> min)
+                                    </p>
+                                <% } else { %>
+                                    <p class="arr">&#8212;</p>
+                                <% } %>
+
+                                <% if (info.departure_time) { %>
+                                    <p class="arr">
+                                        <%= formatDate(info.departure_time) %>
+                                        (<%- info.departure_delay %> min)
+                                    &#8594;</p>
+                                <% } else { %>
+                                    <p class="arr">&#8212;</p>
+                                <% } %>
+                            </td>
+                        <% }); %>
                     </tr>
                 <% }); %>
-             </table>
+            </table>
         </script>
 
         <script src="js/jquery.min.js" type="text/javascript"></script>

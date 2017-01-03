@@ -16,13 +16,13 @@ class Db {
 
     public function get_trains()
     {
-        return $this->pdo->query('SELECT train_name, MAX(schedule_id) AS last_schedule_id FROM schedule
+        return $this->pdo->query('SELECT train_id, train_name, MAX(schedule_id) AS last_schedule_id FROM schedule
                                   JOIN train USING (train_id) GROUP BY train_id ORDER BY train_name');
     }
 
     public function get_train($train_name)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM train WHERE train_name = :name');
+        $stmt = $this->pdo->prepare('SELECT train_id, train_name FROM train WHERE train_name = :name');
         $stmt->execute(array('name' => $train_name));
         return $stmt;
     }
@@ -36,7 +36,7 @@ class Db {
 
     public function get_schedules($train_id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC, schedule_id DESC');
+        $stmt = $this->pdo->prepare('SELECT schedule_id, schedule_date FROM schedule WHERE train_id = :id ORDER BY schedule_date DESC, schedule_id DESC');
         $stmt->execute(array('id' => $train_id));
         return $stmt;
     }
