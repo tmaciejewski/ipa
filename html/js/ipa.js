@@ -65,6 +65,7 @@ var MainView = Backbone.View.extend({
             this.$el.html(this.template({trains: 'waiting'}));
         }
 
+        document.title = 'InfoPasażer Archiver - archiwum opóźnień pociągów';
         return this;
     }
 });
@@ -81,6 +82,7 @@ var TrainView = Backbone.View.extend({
 
     render: function(train) {
         this.$el.html(this.template(train.toJSON()));
+        document.title = train.get('train_name');
         return this;
     }
 });
