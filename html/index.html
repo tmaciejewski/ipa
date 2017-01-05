@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="/img/favicon.png" type="image/png" />
     </head>
     <body>
-        <div id="page"></div>
+        <div id="page"><img src="img/loader.gif" alt="Wczytywanie"></div>
 
         <hr>
         <div id="footer">
@@ -20,10 +20,10 @@
             <h1>InfoPasażer Archiver</h1>
             <h5>(<a href="http://old.ipa.lovethosetrains.com">poprzednia wersja</a>)</h5>
 
-            <p><label for="filter">Filtruj nazwę/skąd/dokąd:</label><input id="filter"></p>
+            <p><label for="filter">Filtruj nazwę/stację pośrednią:</label><input id="filter"></p>
 
             <% if (trains == 'waiting') { %>
-                <img src="img/loader.gif">
+                <img src="img/loader.gif" alt="Wczytywanie">
             <% } else if (trains.length == 0)  { %>
                 Nie znaleziono pociągów
             <% } else { %>
@@ -32,8 +32,8 @@
                     <% _.each(trains, function(train) { %>
                         <tr>
                             <td><a href="#train/<%- train.train_name %>"><%- train.train_name %></a></td>
-                            <td><%- train.from %></td>
-                            <td><%- train.to %></td>
+                            <td><%- train.stations[0] %></td>
+                            <td><%- train.stations[train.stations.length - 1] %></td>
                         </tr>
                     <% }); %>
                  </table>
@@ -85,9 +85,6 @@
                                 }
                                 %> <th><%- info.station_name %></th> <%
                                 i += 1;
-                            });
-                            _.each(_.range(schedule.info.length, max_stations), function() {
-                                %> <th rowspan=2 class="date"></th> <%
                             });
                         %>
                     </tr>

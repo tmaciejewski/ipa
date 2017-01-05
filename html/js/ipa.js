@@ -2,20 +2,25 @@ var Train = Backbone.Model.extend({
     idAttribute: 'train_name',
 
     url: function() {
-        return 'api/trains.php?name=' + this.get('train_name');
+        return 'api/trains/' + this.get('train_name');
     },
 
     matchFilter: function(filter) {
         filter = filter.toLowerCase();
         return this.get("train_name").toLowerCase().indexOf(filter) >= 0 ||
-               this.get("from").toLowerCase().indexOf(filter) >= 0 ||
-               this.get("to").toLowerCase().indexOf(filter) >= 0;
+            _.some(this.get("stations"), function(s) {
+                return s.toLowerCase().indexOf(filter) >= 0
+            });
     }
 });
 
 var Trains = Backbone.Collection.extend({
     model: Train,
-    url: 'api/trains.php'
+    url: 'api/trains',
+
+    parse: function(resp) {
+        return resp.trains;
+    }
 });
 
 var MainView = Backbone.View.extend({

@@ -24,11 +24,8 @@ class TestDb(unittest.TestCase):
         self.db.add_train(name[1])
         self.db.commit()
 
-        self.assertEqual(list(self.db.get_train_id(name[0])), [{'train_id': 1}])
-        self.assertEqual(list(self.db.get_train_id(name[1])), [{'train_id': 2}])
-
-        self.assertEqual(list(self.db.get_trains()), [{'train_id': 2, 'train_name': name[1]},
-                                                      {'train_id': 1, 'train_name': name[0]}])
+        self.assertEqual(list(self.db.get_train_id(name[0])), [{'train_name': name[0], 'train_id': 1}])
+        self.assertEqual(list(self.db.get_train_id(name[1])), [{'train_name': name[1], 'train_id': 2}])
 
     def test_train_name_uniqueness(self):
         name = 'train'
@@ -36,7 +33,7 @@ class TestDb(unittest.TestCase):
         with self.assertRaises(ipa_db.DbError):
             self.db.add_train(name)
         self.db.commit()
-        self.assertEqual(list(self.db.get_train_id(name)), [{'train_id': 1}])
+        self.assertEqual(list(self.db.get_train_id(name)), [{'train_name': name, 'train_id': 1}])
 
     def test_adding_stations(self):
         name = ['station', 'other station']
@@ -64,8 +61,7 @@ class TestDb(unittest.TestCase):
         schedule_date = datetime.date(2010, 12, 21)
         train_id = 1
         train_name = "train name"
-        expected_schedule = {'schedule_id': schedule_id, 'schedule_date': schedule_date,
-                             'train_id': train_id, 'train_name': train_name, 'active': 1}
+        expected_schedule = {'schedule_id': schedule_id, 'schedule_date': schedule_date}
 
         self.assertEqual(list(self.db.get_schedules(train_id)), [])
 
@@ -80,12 +76,9 @@ class TestDb(unittest.TestCase):
         schedule_date = datetime.date(2010, 12, 21)
         train_id = 10
 
-        expected_schedule = {'schedule_id': schedule_id, 'schedule_date': schedule_date,
-                             'train_id': train_id, 'active': 1}
-
         self.db.update_schedule(schedule_id, str(schedule_date), train_id)
         self.db.commit()
-        self.assertEqual(list(self.db.get_active_schedules()), [expected_schedule])
+        self.assertEqual(list(self.db.get_active_schedules()), [{'schedule_id': schedule_id}])
 
         self.db.set_active(schedule_id, False)
         self.db.commit()
@@ -93,7 +86,7 @@ class TestDb(unittest.TestCase):
 
         self.db.set_active(schedule_id, True)
         self.db.commit()
-        self.assertEqual(list(self.db.get_active_schedules()), [expected_schedule])
+        self.assertEqual(list(self.db.get_active_schedules()), [{'schedule_id': schedule_id}])
 
     def test_updating_schedule_infos(self):
         schedule_id = 222
@@ -123,26 +116,17 @@ class TestDb(unittest.TestCase):
                            'arrival_time': None,
                            'departure_delay': 3,
                            'departure_time': datetime.datetime(2016, 12, 21, 12, 1, 30),
-                           'schedule_id': schedule_id,
-                           'station_id': 1,
-                           'station_name': 'station 1',
-                           'stop_number': 0},
+                           'station_name': 'station 1'},
                           {'arrival_delay': -10,
                            'arrival_time': datetime.datetime(2016, 12, 21, 12, 5, 0),
                            'departure_delay': 0,
                            'departure_time': datetime.datetime(2016, 12, 21, 12, 8, 0),
-                           'schedule_id': schedule_id,
-                           'station_id': 2,
-                           'station_name': 'station 2',
-                           'stop_number': 1},
+                           'station_name': 'station 2'},
                           {'arrival_delay': 0,
                            'arrival_time': datetime.datetime(2016, 12, 21, 12, 10, 10),
                            'departure_delay': None,
                            'departure_time': None,
-                           'schedule_id': schedule_id,
-                           'station_id': 3,
-                           'station_name': 'station 3',
-                           'stop_number': 2}])
+                           'station_name': 'station 3'}])
 
 
 if __name__ == '__main__':

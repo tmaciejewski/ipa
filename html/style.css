@@ -16,7 +16,6 @@ h5 {
 
 table {
     table-layout: fixed;
-    width: 300px;
     text-align: center;
     font-size: 14px;
     margin: auto;
@@ -24,7 +23,7 @@ table {
 
 td, th {
     padding: 5px;
-    width: 200px;
+    min-width: 200px;
 }
 
 th {
