@@ -4,16 +4,17 @@ IPA stands for InfoPasażer Archives. InfoPasażer is a site maintained by PKP (
 that shows informations about all trains (even not owned by PKP), eg. their current position and delay. The site is great, but trains
 disappear as soon as they reach their destinations; hence the idea of archiving it.
 
-This project consists of three things:
+This project consists of:
 
 - library for obtaining data from InfoPasażer: `station_api.py` `train_api.py` 
 - script for updating the data and storing it in the database: `src` directory
-- simple web frontend: `html` directory
+- simple REST API: `api` directory
+- simple web frontend using that API: `html` directory
 
 ## Requirements
 
 Python 3.4 is used as main language with BeautifulSoup and MySQL connnector. Data is stored in MySQL Server 5.5.
-Frontend is served by Apache 2.4 using PHP 5.6.
+Frontend is served by Apache 2.4 using mod_wsgi and Flask 0.10.
 
 ## Using as a CLI tool
 
@@ -66,4 +67,25 @@ This will print `2700/1 SIEMIRADZKI` train history:
 
 ## Setting up web frontend
 
-Edit `db.php` file to set database credential and then start apache service with document root pointing to `html` directory.
+Edit `api/flaskapp.wsgi` file and set system paths to `api` and `src` directories, and also secret key.
+Then create Apache page from this template:
+
+    <VirtualHost *:80>
+        ServerName ipa.lovethosetrains.com
+        DocumentRoot /opt/ipa/html
+
+        <Directory /opt/ipa/html>
+            Require all granted
+            AllowOverride All
+        </Directory>
+
+        WSGIScriptAlias /api /opt/ipa/api/flaskapp.wsgi
+        <Directory /opt/ipa/api>
+            Require all granted
+            AddOutputFilterByType DEFLATE application/json
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/ipa-error.log
+        CustomLog ${APACHE_LOG_DIR}/ipa-access.log combined
+    </VirtualHost>
+
