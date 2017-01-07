@@ -14,9 +14,11 @@ var Train = Backbone.Model.extend({
     },
 
     parse: function(train) {
-        train.activeStation = 1;
-        train.firstIntermediateStation = 1;
-        train.lastIntermediateStation = train.stations.length - 2;
+        if (train.stations) {
+            train.activeStation = 1;
+            train.firstIntermediateStation = 1;
+            train.lastIntermediateStation = train.stations.length - 2;
+        }
         return train;
     },
 
