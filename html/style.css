@@ -14,6 +14,16 @@ h5 {
     margin-top: -20px;
 }
 
+#menu {
+    margin: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#menu td {
+    min-width: 300px;
+}
+
 table {
     text-align: center;
     font-size: 14px;
@@ -30,11 +40,7 @@ table {
 }
 
 .arrow-button {
-    width: 3em;
-}
-
-button {
-    font-weight: bold;
+    min-width: 50px;
 }
 
 th {

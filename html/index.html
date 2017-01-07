@@ -2,6 +2,7 @@
     <head>
         <title>InfoPasażer Archiver - archiwum opóźnień pociągów</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/style.css" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"/>
         <link rel="shortcut icon" href="/img/favicon.png" type="image/png" />
@@ -20,11 +21,30 @@
             <h1>InfoPasażer Archiver</h1>
             <h5>(<a href="http://old.ipa.lovethosetrains.com">poprzednia wersja</a>)</h5>
 
-            <p><label for="filter">Filtruj nazwę/stację:</label><input id="filter"></p>
+            <label for="filter">Filtruj pociąg/stację (min. 2 znaki):</label><input id="filter">
+
+            <table id="menu">
+                <tr>
+                    <td class="arrow-button">
+                        <% if (state != 'filtered' && page > 1) { %>
+                            <button class="prev-page">Poprzednia strona</button>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (state == 'full') { %>
+                            <p>Strona <%- page %> z <%- pageCount %></p>
+                        <% } %>
+                    </td>
+                    <td class="arrow-button">
+                        <% if (state != 'filtered' && page < pageCount) { %>
+                            <button class="next-page">Następna strona</button>
+                        <% } %>
+                    </td>
+            </table>
 
             <% if (state == 'waiting') { %>
                 <img src="img/loader.gif" alt="Wczytywanie">
-            <% } else if (state == 'empty') { %>
+            <% } else if (state == 'filtered' && size == 0) { %>
                 Nie znaleziono pociągów
             <% } else { %>
                 <table id="main">
@@ -40,11 +60,15 @@
                 <table>
                     <tr>
                         <td class="arrow-button">
-                            <button class="prev-station" <%= (activeStation > firstIntermediateStation) ? '' : 'disabled'  %>>&#8592;</button>
+                            <% if (activeStation > firstIntermediateStation) { %>
+                                <button class="prev-station">&#8592;</button>
+                            <% } %>
                         </td>
                         <td class="intermediate-station"> <%- stations[activeStation] %> </td>
                         <td class="arrow-button">
-                            <button class="next-station" <%= (activeStation < lastIntermediateStation) ? '' : 'disabled'  %>>&#8594;</button>
+                            <% if (activeStation < lastIntermediateStation) { %>
+                                <button class="next-station">&#8594;</button>
+                            <% } %>
                         </td>
                     </tr>
                 </table>

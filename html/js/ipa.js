@@ -24,16 +24,12 @@ var Train = Backbone.Model.extend({
 
     nextStation: function() {
         var activeStation = this.get("activeStation");
-        if (activeStation < this.get("lastIntermediateStation")) {
-            this.set("activeStation", activeStation + 1);
-        }
+        this.set("activeStation", activeStation + 1);
     },
 
     prevStation: function() {
         var activeStation = this.get("activeStation");
-        if (activeStation > this.get("firstIntermediateStation")) {
-            this.set("activeStation", activeStation - 1);
-        }
+        this.set("activeStation", activeStation - 1);
     }
 });
 
@@ -78,19 +74,15 @@ var MainView = Backbone.View.extend({
     template: _.template($('#main-template').html()),
     filterTimeout: 300,
     nameFilter: '',
+    nameFilterMin: 2,
     lastFilterValue: '',
+    page: 0,
+    trainsPerPage: 100,
 
     events: {
-        'keyup': function(e) {
-            if (e.target.value != this.nameFilter) {
-                var that = this;
-                this.nameFilter = e.target.value;
-                clearTimeout(this.timer);
-                this.timer = setTimeout(function() {
-                    that.render();
-                }, this.filterTimeout);
-            }
-        }
+        'click .next-page': 'nextPage',
+        'click .prev-page': 'prevPage',
+        'keyup #filter': 'filterChanged'
     },
 
     activate: function() {
@@ -102,32 +94,48 @@ var MainView = Backbone.View.extend({
         this.render();
     },
 
+    nextPage: function() {
+        this.page++;
+        this.render();
+    },
+
+    prevPage: function() {
+        this.page--;
+        this.render();
+    },
+
+    filterChanged: function(e) {
+        if (e.target.value != this.nameFilter) {
+            var that = this;
+            this.nameFilter = e.target.value;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(function() {
+                that.render();
+            }, this.filterTimeout);
+        }
+    },
+
     render: function() {
-        if (this.nameFilter) {
+        var trains = [];
+
+        if (this.nameFilter && this.nameFilter.length >= this.nameFilterMin) {
             var that = this
-            var trains = new Trains(this.trains.filter(function (train) {
+            trains = this.trains.filter(function (train) {
                 return train.matchFilter(that.nameFilter);
-            }));
-
-            if (trains.length > 0) {
-                this.$el.html(this.template({state: 'ok'}));
-                trains.each(function(train) {
-                    var view = new MainItemView({model: train});
-                    $('#main').append(view.render().el);
-                });
-            } else {
-                this.$el.html(this.template({state: 'empty'}));
-            }
-
-        } else if (this.trains.length > 0) {
-            this.$el.html(this.template({state: 'ok'}));
-            this.trains.each(function(train) {
-                var view = new MainItemView({model: train});
-                $('#main').append(view.render().el);
             });
+            this.$el.html(this.template({state: 'filtered', size: trains.length}));
+        } else if (this.trains.length > 0) {
+            var pageCount = Math.ceil(this.trains.length / this.trainsPerPage);
+            this.$el.html(this.template({state: 'full', page: this.page + 1, pageCount: pageCount}));
+            trains = _.first(this.trains.rest(this.page * this.trainsPerPage), this.trainsPerPage);
         } else {
             this.$el.html(this.template({state: 'waiting'}));
         }
+
+        _.each(trains, function(train) {
+            var view = new MainItemView({model: train});
+            $('#main').append(view.render().el);
+        });
 
         $('#filter').focus();
         $('#filter').val(this.nameFilter);
