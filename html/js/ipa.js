@@ -11,6 +11,27 @@ var Train = Backbone.Model.extend({
             _.some(this.get("stations"), function(s) {
                 return s.toLowerCase().indexOf(filter) >= 0
             });
+    },
+
+    parse: function(train) {
+        train.activeStation = 1;
+        train.firstIntermediateStation = 1;
+        train.lastIntermediateStation = train.stations.length - 2;
+        return train;
+    },
+
+    nextStation: function() {
+        var activeStation = this.get("activeStation");
+        if (activeStation < this.get("lastIntermediateStation")) {
+            this.set("activeStation", activeStation + 1);
+        }
+    },
+
+    prevStation: function() {
+        var activeStation = this.get("activeStation");
+        if (activeStation > this.get("firstIntermediateStation")) {
+            this.set("activeStation", activeStation - 1);
+        }
     }
 });
 
@@ -20,6 +41,33 @@ var Trains = Backbone.Collection.extend({
 
     parse: function(resp) {
         return resp.trains;
+    }
+});
+
+var MainItemView = Backbone.View.extend({
+    tagName: 'tr',
+    template: _.template($('#main-item-template').html()),
+
+    events: {
+        'click .prev-station': 'prevStation',
+        'click .next-station': 'nextStation'
+    },
+
+    initialize: function() {
+        this.listenTo(this.model, 'change', this.render);
+    },
+
+    prevStation: function() {
+        this.model.prevStation();
+    },
+
+    nextStation: function() {
+        this.model.nextStation();
+    },
+
+    render: function() {
+        this.$el.html(this.template(this.model.toJSON()));
+        return this;
     }
 });
 
@@ -53,23 +101,34 @@ var MainView = Backbone.View.extend({
     },
 
     render: function() {
-        var trains = this.trains;
         if (this.nameFilter) {
             var that = this
-            trains = new Trains(trains.filter(function (train) {
+            var trains = new Trains(this.trains.filter(function (train) {
                 return train.matchFilter(that.nameFilter);
             }));
 
-            this.$el.html(this.template({trains: trains.toJSON()}));
+            if (trains.length > 0) {
+                this.$el.html(this.template({state: 'ok'}));
+                trains.each(function(train) {
+                    var view = new MainItemView({model: train});
+                    $('#main').append(view.render().el);
+                });
+            } else {
+                this.$el.html(this.template({state: 'empty'}));
+            }
 
-            $('#filter').focus();
-            $('#filter').val(this.nameFilter);
-        } else if (trains.length > 0) {
-            this.$el.html(this.template({trains: trains.toJSON()}));
+        } else if (this.trains.length > 0) {
+            this.$el.html(this.template({state: 'ok'}));
+            this.trains.each(function(train) {
+                var view = new MainItemView({model: train});
+                $('#main').append(view.render().el);
+            });
         } else {
-            this.$el.html(this.template({trains: 'waiting'}));
+            this.$el.html(this.template({state: 'waiting'}));
         }
 
+        $('#filter').focus();
+        $('#filter').val(this.nameFilter);
         document.title = 'InfoPasażer Archiver - archiwum opóźnień pociągów';
         return this;
     }

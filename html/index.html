@@ -22,22 +22,34 @@
 
             <p><label for="filter">Filtruj nazwę/stację pośrednią:</label><input id="filter"></p>
 
-            <% if (trains == 'waiting') { %>
+            <% if (state == 'waiting') { %>
                 <img src="img/loader.gif" alt="Wczytywanie">
-            <% } else if (trains.length == 0)  { %>
+            <% } else if (state == 'empty') { %>
                 Nie znaleziono pociągów
             <% } else { %>
                 <table id="main">
-                    <tr><th>Numer pociągu</th><th>Skąd</th><th>Dokąd</th></tr>
-                    <% _.each(trains, function(train) { %>
-                        <tr>
-                            <td><a href="#train/<%- train.train_name %>"><%- train.train_name %></a></td>
-                            <td><%- train.stations[0] %></td>
-                            <td><%- train.stations[train.stations.length - 1] %></td>
-                        </tr>
-                    <% }); %>
+                    <tr><th>Numer pociągu</th><th>Skąd</th><th>Przez</th><th>Dokąd</th></tr>
                  </table>
             <% } %>
+        </script>
+
+        <script type="text/template" id="main-item-template">
+            <td><a href="#train/<%- train_name %>"><%- train_name %></a></td>
+            <td><%- stations[0] %></td>
+            <td>
+                <table>
+                    <tr>
+                        <td class="arrow-button">
+                            <button class="prev-station" <%= (activeStation > firstIntermediateStation) ? '' : 'disabled'  %>>&#8592;</button>
+                        </td>
+                        <td class="intermediate-station"> <%- stations[activeStation] %> </td>
+                        <td class="arrow-button">
+                            <button class="next-station" <%= (activeStation < lastIntermediateStation) ? '' : 'disabled'  %>>&#8594;</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td><%- stations[stations.length - 1] %></td>
         </script>
 
         <script type="text/template" id="train-template">

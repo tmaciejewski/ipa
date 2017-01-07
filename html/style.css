@@ -15,15 +15,26 @@ h5 {
 }
 
 table {
-    table-layout: fixed;
     text-align: center;
     font-size: 14px;
     margin: auto;
 }
 
-td, th {
+#main > tbody > td, th {
     padding: 5px;
     min-width: 200px;
+}
+
+.intermediate-station {
+    width: 200px;
+}
+
+.arrow-button {
+    width: 3em;
+}
+
+button {
+    font-weight: bold;
 }
 
 th {
@@ -61,11 +72,11 @@ th:empty {
     line-height: 2em;
 }
 
-#main tr:nth-child(even) {
+#main > tbody  > tr:nth-child(even) {
     background-color: #9e9;
 }
 
-#main tr:nth-child(odd) {
+#main > tbody > tr:nth-child(odd) {
     background-color: #6c6;
 }
 
