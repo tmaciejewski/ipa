@@ -75,7 +75,8 @@ class Db:
 
     def get_schedules(self, train_id):
         return self.select_query('''SELECT schedule_id, schedule_date FROM schedule INNER JOIN train USING (train_id)
-                                    WHERE schedule.train_id = %s ORDER BY schedule_date''', (train_id,))
+                                    WHERE schedule.train_id = %s ORDER BY schedule_date DESC''', (train_id,))
+
 
     def update_schedule_info(self, schedule_id, stop_number, station_id, info):
         self._execute('''REPLACE INTO schedule_info VALUES
