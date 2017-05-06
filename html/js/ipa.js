@@ -146,17 +146,26 @@ var MainView = Backbone.View.extend({
 
 var TrainView = Backbone.View.extend({
     el: '#page',
-    template: _.template($('#train-template').html()),
 
     activate: function(name) {
         var that = this;
         var train = new Train({train_name: name});
-        train.fetch({success: function(train) { that.render(train); }});
+        train.fetch({
+            success: function(train) { that.render(train); },
+            error: function() { that.error(); }
+        });
     },
 
     render: function(train) {
-        this.$el.html(this.template(train.toJSON()));
+        var template = _.template($('#train-template').html());
+        this.$el.html(template(train.toJSON()));
         document.title = train.get('train_name');
+        return this;
+    },
+
+    error: function() {
+        var template = _.template($('#error-template').html());
+        this.$el.html(template({msg: 'Nie ma takiego pociągu'}));
         return this;
     }
 });

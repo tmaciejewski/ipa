@@ -25,21 +25,22 @@
 
             <table id="menu">
                 <tr>
-                    <td class="arrow-button">
-                        <% if (state != 'filtered' && page > 1) { %>
-                            <button class="prev-page">Poprzednia strona</button>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (state == 'full') { %>
+                    <% if (state == 'full') { %>
+                        <td class="arrow-button">
+                            <% if (page > 1) { %>
+                                <button class="prev-page">Poprzednia strona</button>
+                            <% } %>
+                        </td>
+                        <td>
                             <p>Strona <%- page %> z <%- pageCount %></p>
-                        <% } %>
-                    </td>
-                    <td class="arrow-button">
-                        <% if (state != 'filtered' && page < pageCount) { %>
-                            <button class="next-page">Następna strona</button>
-                        <% } %>
-                    </td>
+                        </td>
+                        <td class="arrow-button">
+                            <% if (page < pageCount) { %>
+                                <button class="next-page">Następna strona</button>
+                            <% } %>
+                        </td>
+                    <% } %>
+                </tr>
             </table>
 
             <% if (state == 'waiting') { %>
@@ -149,6 +150,10 @@
                     </tr>
                 <% }); %>
             </table>
+        </script>
+
+        <script type="text/template" id="error-template">
+            <h1><div><a href="#">&lt;&lt;</a></div><%- msg %></h1>
         </script>
 
         <script src="js/jquery.min.js" type="text/javascript"></script>
