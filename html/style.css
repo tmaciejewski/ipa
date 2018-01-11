@@ -89,6 +89,10 @@ th:empty {
     font-size: 20px;
 }
 
+.message {
+    margin: 15px;
+}
+
 hr {
     margin-top: 20px;
     margin-bottom: -10px;

@@ -88,9 +88,14 @@ var MainView = Backbone.View.extend({
     activate: function() {
         if (!this.trains) {
             var that = this;
-            this.trains = new Trains();
-            this.trains.fetch({success: function() { that.render(); }});
+            this.allTrains = new Trains();
+            this.allTrains.fetch({
+                success: function() { that.state = 'ok'; that.render(); },
+                error: function() { that.state = 'error'; that.render(); }
+            });
+            this.state = 'waiting';
         }
+        document.title = 'InfoPasażer Archiver - archiwum opóźnień pociągów';
         this.render();
     },
 
@@ -110,27 +115,31 @@ var MainView = Backbone.View.extend({
             this.nameFilter = e.target.value;
             clearTimeout(this.timer);
             this.timer = setTimeout(function() {
+                that.page = 0;
                 that.render();
             }, this.filterTimeout);
         }
     },
 
     render: function() {
+        var that = this;
         var trains = [];
+        var pageCount = 0;
 
-        if (this.nameFilter && this.nameFilter.length >= this.nameFilterMin) {
-            var that = this
-            trains = this.trains.filter(function (train) {
+        if (this.nameFilter != '') {
+            trains = this.allTrains.filter(function (train) {
                 return train.matchFilter(that.nameFilter);
             });
-            this.$el.html(this.template({state: 'filtered', size: trains.length}));
-        } else if (this.trains.length > 0) {
-            var pageCount = Math.ceil(this.trains.length / this.trainsPerPage);
-            this.$el.html(this.template({state: 'full', page: this.page + 1, pageCount: pageCount}));
-            trains = _.first(this.trains.rest(this.page * this.trainsPerPage), this.trainsPerPage);
         } else {
-            this.$el.html(this.template({state: 'waiting'}));
+            trains = this.allTrains.toArray();
         }
+
+        if (trains.length > 0) {
+            pageCount = Math.ceil(trains.length / this.trainsPerPage);
+            trains = _.first(_.rest(trains, this.page * this.trainsPerPage), this.trainsPerPage);
+        }
+
+        this.$el.html(this.template({state: this.state, page: this.page + 1, pageCount: pageCount, size: trains.length}));
 
         _.each(trains, function(train) {
             var view = new MainItemView({model: train});
@@ -139,7 +148,6 @@ var MainView = Backbone.View.extend({
 
         $('#filter').focus();
         $('#filter').val(this.nameFilter);
-        document.title = 'InfoPasażer Archiver - archiwum opóźnień pociągów';
         return this;
     }
 });

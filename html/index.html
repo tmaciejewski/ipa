@@ -21,11 +21,23 @@
             <h1>InfoPasażer Archiver</h1>
             <h5><a href="ipa_15_16.tar.bz2">2015/2016</a> | <a href="ipa_16_17.7z">2016/2017</a></h5>
 
-            <label for="filter">Filtruj pociąg/stację (min. 2 znaki):</label><input id="filter">
+            <label for="filter">Filtruj pociąg/stację:</label><input id="filter">
 
-            <table id="menu">
-                <tr>
-                    <% if (state == 'full') { %>
+            <% if (state == 'waiting') { %>
+                <div class="message">
+                    <img src="img/loader.gif" alt="Wczytywanie">
+                </div>
+            <% } else if (state == 'error') { %>
+                <div class="message">
+                    Wystąpił błąd
+                </div>
+            <% } else if (size == 0) { %>
+                <div class="message">
+                    Nie znaleziono pociągów
+                </div>
+            <% } else { %>
+                <table id="menu">
+                    <tr>
                         <td class="arrow-button">
                             <% if (page > 1) { %>
                                 <button class="prev-page">Poprzednia strona</button>
@@ -39,15 +51,9 @@
                                 <button class="next-page">Następna strona</button>
                             <% } %>
                         </td>
-                    <% } %>
-                </tr>
-            </table>
+                    </tr>
+                </table>
 
-            <% if (state == 'waiting') { %>
-                <img src="img/loader.gif" alt="Wczytywanie">
-            <% } else if (state == 'filtered' && size == 0) { %>
-                Nie znaleziono pociągów
-            <% } else { %>
                 <table id="main">
                     <tr><th>Numer pociągu</th><th>Skąd</th><th>Przez</th><th>Dokąd</th></tr>
                  </table>
