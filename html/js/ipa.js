@@ -86,7 +86,7 @@ var MainView = Backbone.View.extend({
     },
 
     activate: function() {
-        if (!this.trains) {
+        if (!this.allTrains) {
             var that = this;
             this.allTrains = new Trains();
             this.allTrains.fetch({
@@ -162,12 +162,12 @@ var TrainView = Backbone.View.extend({
             success: function(train) { that.render(train); },
             error: function() { that.error(); }
         });
+        document.title = name;
     },
 
     render: function(train) {
         var template = _.template($('#train-template').html());
         this.$el.html(template(train.toJSON()));
-        document.title = train.get('train_name');
         return this;
     },
 

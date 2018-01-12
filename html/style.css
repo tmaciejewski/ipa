@@ -1,6 +1,7 @@
 body {
     text-align: center;
     font-family: 'PT Sans'; sans-serif;
+    overflow-y: scroll;
 }
 
 h1 div {
