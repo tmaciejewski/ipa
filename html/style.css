@@ -16,6 +16,7 @@ h5 {
 
 .tooltip {
     color: #444;
+    cursor: help;
 }
 
 #menu {
