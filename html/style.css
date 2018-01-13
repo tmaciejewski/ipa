@@ -20,13 +20,18 @@ h5 {
 }
 
 #menu {
-    margin: 20px;
     margin-left: auto;
     margin-right: auto;
+    table-layout: fixed;
+    height: 40px;
 }
 
 #menu td {
     min-width: 300px;
+}
+
+#main-content {
+    margin-top: 20px;
 }
 
 table {
