@@ -151,6 +151,8 @@ var MainView = Backbone.View.extend({
     render: function() {
         this.$el.html(this.template());
         this.renderTrains();
+        $('#filter').val(this.nameFilter)
+        $('#filter').focus();
         return this;
     }
 });
