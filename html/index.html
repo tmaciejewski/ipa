@@ -26,6 +26,10 @@
 
             <label for="filter">Filtruj pociąg/stację:</label><input id="filter">
 
+            <div id="main-content"></div>
+        </script>
+
+        <script type="text/template" id="main-table-template">
             <% if (state == 'waiting') { %>
                 <div class="message">
                     <img src="img/loader.gif" alt="Wczytywanie">
@@ -57,7 +61,7 @@
                     </tr>
                 </table>
 
-                <table id="main">
+                <table id="main-table">
                     <tr><th>Numer pociągu</th><th>Skąd</th><th>Przez</th><th>Dokąd</th></tr>
                  </table>
             <% } %>

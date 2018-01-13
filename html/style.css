@@ -34,9 +34,21 @@ table {
     margin: auto;
 }
 
-#main > tbody > td, th {
+#main-table > tbody > td, th {
     padding: 5px;
     min-width: 200px;
+}
+
+#main-table {
+    line-height: 2em;
+}
+
+#main-table > tbody > tr:nth-child(even) {
+    background-color: #9e9;
+}
+
+#main-table > tbody > tr:nth-child(odd) {
+    background-color: #6c6;
 }
 
 .intermediate-station {
@@ -76,18 +88,6 @@ th:empty {
 #footer {
     font-size: small;
     text-align: left;
-}
-
-#main {
-    line-height: 2em;
-}
-
-#main > tbody  > tr:nth-child(even) {
-    background-color: #9e9;
-}
-
-#main > tbody > tr:nth-child(odd) {
-    background-color: #6c6;
 }
 
 .date {
