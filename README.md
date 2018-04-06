@@ -82,6 +82,7 @@ Then create Apache page from this template:
         WSGIScriptAlias /api /opt/ipa/api/flaskapp.wsgi
         <Directory /opt/ipa/api>
             Require all granted
+            AllowOverride All
             AddOutputFilterByType DEFLATE application/json
         </Directory>
 
