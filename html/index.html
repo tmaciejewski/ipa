@@ -142,23 +142,21 @@
                     <tr>
                         <% _.each(schedule.info, function(info) { %>
                             <td class="<%= getDelayClass(info) %>">
+                                <table>
                                 <% if (info.arrival_time) { %>
-                                    <p class="arr">&#8594;
+                                    <tr><td>&#8594;</td><td class="time">
                                         <%= formatDate(info.arrival_time) %>
                                         (<%- info.arrival_delay %> min)
-                                    </p>
-                                <% } else { %>
-                                    <p class="arr">&#8212;</p>
+                                        </td><td></td></tr>
                                 <% } %>
 
                                 <% if (info.departure_time) { %>
-                                    <p class="arr">
+                                    <tr><td></td><td class="time">
                                         <%= formatDate(info.departure_time) %>
                                         (<%- info.departure_delay %> min)
-                                    &#8594;</p>
-                                <% } else { %>
-                                    <p class="arr">&#8212;</p>
+                                        </td><td>&#8594;</td></tr>
                                 <% } %>
+                                </table>
                             </td>
                         <% }); %>
                     </tr>
