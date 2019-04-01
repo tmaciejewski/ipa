@@ -39,3 +39,7 @@ class ScheduleInfo:
 
 tables = [Train, Schedule, Station, ScheduleInfo]
 
+if __name__ == "__main__":
+    for table in tables:
+        print(table.drop, end=';\n')
+        print(table.create, end=';\n')
