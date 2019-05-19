@@ -8,7 +8,7 @@ import ipa_config
 def fetch_html(train_id):
     train_request = "/?p=train&id=" + str(train_id)
 
-    connection = http.client.HTTPConnection(ipa_config.domain)
+    connection = http.client.HTTPSConnection(ipa_config.domain)
     connection.request('GET', train_request)
 
     return connection.getresponse().read()

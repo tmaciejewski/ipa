@@ -5,10 +5,10 @@ import sys
 from bs4 import BeautifulSoup
 import ipa_config
 
-def fetch_html(train_id):
-    train_request = "/?p=station&id=" + str(train_id)
+def fetch_html(station_id):
+    train_request = "/?p=station&id=" + str(station_id)
 
-    connection = http.client.HTTPConnection(ipa_config.domain)
+    connection = http.client.HTTPSConnection(ipa_config.domain)
     connection.request('GET', train_request)
 
     return connection.getresponse().read()
