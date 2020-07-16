@@ -59,13 +59,13 @@ class Db:
         self._execute('''UPDATE schedule SET active = %s WHERE schedule_id = %s''', (active_value, schedule_id))
 
     def add_train(self, train_name):
-        self._execute('''INSERT INTO train VALUES('', %s)''', (train_name,))
+        self._execute('''INSERT INTO train (train_name) VALUES (%s)''', (train_name,))
 
     def get_train_id(self, train_name):
         return self.select_query('SELECT train_id, train_name FROM train WHERE train_name = %s', (train_name,))
 
     def add_station(self, station_name):
-        self._execute('''INSERT INTO station VALUES('', %s)''', (station_name,))
+        self._execute('''INSERT INTO station (station_name) VALUES (%s)''', (station_name,))
 
     def get_station_id(self, station_name):
         return self.select_query('SELECT station_id FROM station WHERE station_name = %s', (station_name,))
