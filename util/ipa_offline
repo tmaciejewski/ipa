@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+import datetime
+import json
+import os
+import requests
+import sys
+
+def write_to_file(directory, filename, data):
+    with open(os.path.join(directory, filename.replace('/', '_')), 'wb') as f:
+        f.write(data)
+
+def get_train_list():
+    resp = requests.get(f'http://{domain}/api/trains')
+    if resp.status_code != 200:
+        raise Exception('Got response %d %s' % (resp.status, resp.reason))
+    return resp.json()['trains']
+
+def get_train(train_name):
+    safe_train_name = train_name.replace('%2F', '/').replace('+', '%20')
+    resp = requests.get(f'http://{domain}/api/trains/{safe_train_name}')
+    if resp.status_code != 200:
+        raise Exception('Got response %d %s' % (resp.status, resp.reason))
+    write_to_file(os.path.join(output_dir, 'train'), train_name, resp.content)
+
+def calculate_eta(start, current, total):
+    seconds_elapsed = (datetime.datetime.now() - start).seconds
+    if seconds_elapsed > 0:
+        left = total - current
+        avg = float(current) / seconds_elapsed
+        eta_in_seconds = int(left * avg)
+        return datetime.timedelta(seconds = eta_in_seconds)
+
+try:
+    domain = sys.argv[1]
+    output_dir = sys.argv[2]
+except IndexError:
+    print('ipa_offline URL output_directory')
+    sys.exit(1)
+
+print('Getting train list... ', end='', flush=True)
+train_list = get_train_list()
+print(f'{len(train_list)} trains')
+write_to_file(output_dir, 'trains', json.dumps({'trains': train_list}).encode())
+
+i = 1
+start = datetime.datetime.now()
+for train in train_list:
+    print('Getting train {:>4}/{:>4}: {:<20}'.format(i, len(train_list), train['train_name']), end='')
+    get_train(train['train_name'])
+    i += 1
+    eta = calculate_eta(start, i, len(train_list))
+    print('\t\tETA:', eta, end='\r')
