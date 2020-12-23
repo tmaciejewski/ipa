@@ -1,7 +1,7 @@
 # IPA
 
 IPA stands for InfoPasażer Archives. InfoPasażer is a site maintained by PKP (National Polish Railways)
-that shows informations about all trains (even not owned by PKP), eg. their current position and delay. The site is great, but trains
+that shows information about all trains (even not owned by PKP), eg. their current position and delay. The site is great, but trains
 disappear as soon as they reach their destinations; hence the idea of archiving it.
 
 This project consists of:
@@ -13,22 +13,22 @@ This project consists of:
 
 ## Requirements
 
-Python 3 is used as the main language with BeautifulSoup and MySQL connnector libraries. Data is stored in MariaDB.
+Python 3 is used as the main language with BeautifulSoup and MySQL connector libraries. Data is stored in MariaDB.
 Frontend is served by Apache 2.4 using mod_wsgi and Flask.
 
 ## Using as a CLI tool
 
-Mainly for testing purpose, there are scripts for printing the contents directly from the site on console.
+Mainly for testing purpose, there are scripts for printing the contents directly from InfoPasażer to console.
 
 ### Printing station details
 
-Go to infopasazer.intercity.pl and find interestring station, then copy `stationid` value from URL and run:
+Go to infopasazer.intercity.pl and find interesting station, then copy `stationid` value from URL and run:
 
     ./station_api.py stationid
 
 ### Printing train details
 
-Go to infopasazer.intercity.pl and find interestring train, then copy `trainid` value from URL and run:
+Go to infopasazer.intercity.pl and find interesting train, then copy `trainid` value from URL and run:
 
     ./train_api.py trainid
 
