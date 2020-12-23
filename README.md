@@ -13,8 +13,8 @@ This project consists of:
 
 ## Requirements
 
-Python 3.4 is used as main language with BeautifulSoup and MySQL connnector. Data is stored in MySQL Server 5.5.
-Frontend is served by Apache 2.4 using mod_wsgi and Flask 0.10.
+Python 3 is used as the main language with BeautifulSoup and MySQL connnector libraries. Data is stored in MariaDB.
+Frontend is served by Apache 2.4 using mod_wsgi and Flask.
 
 ## Using as a CLI tool
 
