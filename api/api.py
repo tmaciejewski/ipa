@@ -40,7 +40,7 @@ def all_trains():
 @app.route('/trains/<path:train_name>')
 def train(train_name):
     try:
-        trains = train_cache[train_name]
+        train = train_cache[train_name]
     except KeyError:
         db = ipa_db.Db(ipa_config.db['dev'])
         try:
