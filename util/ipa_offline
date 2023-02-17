@@ -1,53 +1,76 @@
 #!/usr/bin/env python3
 
-import datetime
+import http.client
 import json
 import os
-import requests
 import sys
+import time
+import urllib
 
-def write_to_file(directory, filename, data):
-    with open(os.path.join(directory, filename.replace('/', '_')), 'wb') as f:
+def write_to_file(filename, data):
+    with open(os.path.join(output_dir, filename), 'wb') as f:
         f.write(data)
 
-def get_train_list():
-    resp = requests.get(f'http://{domain}/api/trains')
-    if resp.status_code != 200:
+def get_train_list(conn):
+    conn.request('GET', '/api/trains')
+    resp = conn.getresponse()
+    if resp.status != 200:
         raise Exception('Got response %d %s' % (resp.status, resp.reason))
-    return resp.json()['trains']
+    return resp.read().decode()
 
-def get_train(train_name):
-    safe_train_name = train_name.replace('%2F', '/').replace('+', '%20')
-    resp = requests.get(f'http://{domain}/api/trains/{safe_train_name}')
-    if resp.status_code != 200:
+def get_train(conn, train_name):
+    req = '/api/trains/' + urllib.parse.quote_plus(train_name).replace('%2F', '/').replace('+', '%20')
+    conn.request('GET', req)
+    resp = conn.getresponse()
+    if resp.status != 200:
         raise Exception('Got response %d %s' % (resp.status, resp.reason))
-    write_to_file(os.path.join(output_dir, 'train'), train_name, resp.content)
+    return resp.read().decode()
 
-def calculate_eta(start, current, total):
-    seconds_elapsed = (datetime.datetime.now() - start).seconds
-    if seconds_elapsed > 0:
-        left = total - current
-        avg = float(current) / seconds_elapsed
-        eta_in_seconds = int(left * avg)
-        return datetime.timedelta(seconds = eta_in_seconds)
+def format_time(seconds):
+    if seconds >= 60:
+        return '%dm %ds' % (seconds / 60, seconds % 60)
+    else:
+        return '%ds' % seconds
+
+def eta(i, total, start):
+    elapsed = time.time() - start
+    if i > 3 and i < total:
+        left = total - i
+        avg = elapsed / i
+        eta = left * avg
+        return 'Elapsed: %-10s ETA: %-10s' % (format_time(elapsed), format_time(eta))
+    else:
+        return ''
+
+
+def get_trains(URL, output_dir):
+    print('Connecting...')
+    conn = http.client.HTTPConnection(URL)
+
+    print('Getting train list...')
+    trains = get_train_list(conn)
+    train_list = json.loads(trains)['trains']
+    write_to_file('trains', trains.encode())
+
+    i = 0
+    start = time.time()
+    for train in train_list:
+        train_name = train['train_name']
+        print('[%4i/%4i] Getting %-50s %s' % (i, len(train_list), train_name, eta(i, len(train_list), start)))
+        train = get_train(conn, train_name)
+        train_file = os.path.join('train', train_name.replace('/', '_'))
+        write_to_file(train_file, train.encode())
+        i += 1
 
 try:
-    domain = sys.argv[1]
+    URL = sys.argv[1]
     output_dir = sys.argv[2]
+
+    os.makedirs(os.path.join(output_dir, 'train'), exist_ok=True)
+
+    get_trains(URL, output_dir)
 except IndexError:
     print('ipa_offline URL output_directory')
     sys.exit(1)
 
-print('Getting train list... ', end='', flush=True)
-train_list = get_train_list()
-print(f'{len(train_list)} trains')
-write_to_file(output_dir, 'trains', json.dumps({'trains': train_list}).encode())
 
-i = 1
-start = datetime.datetime.now()
-for train in train_list:
-    print('Getting train {:>4}/{:>4}: {:<20}'.format(i, len(train_list), train['train_name']), end='')
-    get_train(train['train_name'])
-    i += 1
-    eta = calculate_eta(start, i, len(train_list))
-    print('\t\tETA:', eta, end='\r')
