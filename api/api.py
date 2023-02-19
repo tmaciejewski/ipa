@@ -19,12 +19,13 @@ app = flask.Flask(__name__)
 app.json_encoder = DateTimeEncoder
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-train_cache = cache.Cache(limit=100, duration=10)
+main_cache = cache.Cache(limit=1, duration=3600)
+train_cache = cache.Cache(limit=1000, duration=600)
 
 @app.route('/trains')
 def all_trains():
     try:
-        trains = train_cache['']
+        trains = main_cache['']
     except KeyError:
         db = ipa_db.Db(ipa_config.db['dev'])
         trains = []
@@ -33,7 +34,7 @@ def all_trains():
                 'train_name': train['train_name'],
                 'stations': train['stations'].split(',')
                 })
-        train_cache[''] = trains
+        main_cache[''] = trains
 
     return flask.jsonify(trains = trains)
 
